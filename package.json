@@ -1,0 +1,27 @@
+{
+  "name": "partridge-logging",
+  "version": "0.44.0",
+  "description": "Provides logging services to other packages",
+  "main": "src/index.js",
+  "keywords": [
+    "logging"
+  ],
+  "author": "Matt Penrice <matthew.penrice@gmail.com>",
+  "homepage": "https://github.com/elmpp/partridge#readme",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elmpp/partridge.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/elmpp/partridge/issues"
+  },
+  "dependencies": {
+    "@google-cloud/logging-winston": "^0.10.2",
+    "partridge-config": "*",
+    "winston": "^3.1.0"
+  }
+}
