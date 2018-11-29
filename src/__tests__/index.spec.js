@@ -8,7 +8,8 @@ describe('partridge-logging-index', () => {
     configMock = jest.mock(configModule, () => ({logging: {stackDriverEnable: false}}))
   })
   it('attaches stackDriver transport when config specifies', () => {
-    configMock.mockImplementation(() => ({logging: {stackDriverEnable: true}}))
+    // configMock.mockImplementation(() => ({logging: {stackDriverEnable: true}}))
+    console.log('configMock :', configMock);
     // const stackDriverMock = jest.mock('@google-cloud/logging-winston')
 
     expect(1).toEqual(1)

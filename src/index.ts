@@ -7,6 +7,7 @@ const transports = [new winston.transports.Console()]
 // the config will drive what transports we attach to our logging instance
 if (config.logging.stackDriverEnable) {
   const {LoggingWinston} = require('@google-cloud/logging-winston')
+  console.log('LoggingWinston :', LoggingWinston);
   const loggingWinston = new LoggingWinston()
 
   // Logs will be written to: "projects/YOUR_PROJECT_ID/logs/winston_log"
@@ -21,3 +22,5 @@ const logger = winston.createLogger({
 // Writes some log entries
 logger.error('warp nacelles offline')
 logger.info('shields at 99%')
+
+export default logger
