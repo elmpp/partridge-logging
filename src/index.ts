@@ -1,6 +1,6 @@
 // https://goo.gl/wcwLaK
-const winston = require('winston')
-const config = require('partridge-config')
+import winston from 'winston'
+import {config} from 'partridge-config'
 
 const transports = [new winston.transports.Console()]
 

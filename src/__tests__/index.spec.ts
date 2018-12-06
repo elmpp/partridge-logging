@@ -1,10 +1,10 @@
-import * as StackDriverModule from "@google-cloud/logging-winston"
+import * as StackDriverModule from "@google-cloud/logging-winston" // https://goo.gl/wcwLaK
 import * as WinstonModule from 'winston'
 
 describe("partridge-logging-index", () => {
-  let stackDriverTransportSpy
-  let mockStackDriver
-  let createLoggerSpy
+  let stackDriverTransportSpy: any
+  let mockStackDriver: any
+  let createLoggerSpy: any
 
   beforeEach(() => {
     mockStackDriver = new StackDriverModule.LoggingWinston()

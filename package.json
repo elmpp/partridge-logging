@@ -2,7 +2,6 @@
   "name": "partridge-logging",
   "version": "0.44.0",
   "description": "Provides logging services to other packages",
-  "main": "src/index.js",
   "keywords": [
     "logging"
   ],
@@ -14,6 +13,9 @@
     "url": "git+https://github.com/elmpp/partridge.git"
   },
   "scripts": {
+    "build": "tsc",
+    "dev": "npm run build -- --watch",
+    "dev:down": "npx nodemon ",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "bugs": {
@@ -23,5 +25,10 @@
     "@google-cloud/logging-winston": "^0.10.2",
     "partridge-config": "*",
     "winston": "^3.1.0"
+  },
+  "main": "lib/index.ts",
+  "types": "lib/index.d.ts",
+  "devDependencies": {
+    "@types/winston": "^2.4.4"
   }
 }
