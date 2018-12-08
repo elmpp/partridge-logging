@@ -13,10 +13,10 @@
     "url": "git+https://github.com/elmpp/partridge.git"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "dev": "npm run build -- --watch",
-    "dev:down": "npx nodemon ",
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "type-check": "tsc --noEmit"
   },
   "bugs": {
     "url": "https://github.com/elmpp/partridge/issues"
