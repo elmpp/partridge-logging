@@ -5,14 +5,13 @@ import {config} from 'partridge-config'
 const transports = [new winston.transports.Console()]
 
 // the config will drive what transports we attach to our logging instance
-if (config.logging.stackDriverEnable) {
+if (config.get('logging.stackDriverEnable')) {
   const {LoggingWinston} = require('@google-cloud/logging-winston')
   const loggingWinston = new LoggingWinston()
 
   // Logs will be written to: "projects/YOUR_PROJECT_ID/logs/winston_log"
   transports.push(loggingWinston)
 }
-
 const logger = winston.createLogger({
   level: 'info',
   transports,

@@ -1,5 +1,5 @@
 import * as StackDriverModule from "@google-cloud/logging-winston" // https://goo.gl/wcwLaK
-import * as WinstonModule from 'winston'
+import WinstonModule from 'winston'
 
 describe("partridge-logging-index", () => {
   let stackDriverTransportSpy: any
@@ -13,16 +13,16 @@ describe("partridge-logging-index", () => {
     createLoggerSpy = jest.spyOn(WinstonModule, "createLogger")
   });
 
-  it("attaches stackDriver transport when config specifies", () => {
-    jest.doMock("partridge-config", () => ({logging: {stackDriverEnable: true}}))
+  it("attaches stackDriver transport when config specifies on", () => {
+    jest.doMock("config", () => ({get: () => true}))
     require("../index")
-
+    
     expect(stackDriverTransportSpy).toHaveBeenCalled()
     expect(createLoggerSpy.mock.calls[0][0].transports).toContain(mockStackDriver)
   })
   
-  it("attaches stackDriver transport when config specifies", () => {
-    jest.doMock("partridge-config", () => ({logging: {stackDriverEnable: false}}))
+  it("attaches stackDriver transport when config specifies off", () => {
+    jest.doMock("partridge-config", () => ({get: () => false}))
     require("../index")
 
     expect(stackDriverTransportSpy).not.toHaveBeenCalled()
