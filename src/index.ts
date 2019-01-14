@@ -12,13 +12,20 @@ if (config.get('logging.stackDriverEnable')) {
   // Logs will be written to: "projects/YOUR_PROJECT_ID/logs/winston_log"
   transports.push(loggingWinston)
 }
+
+if (config.get('logging.consoleEnable')) {
+  transports.push(new winston.transports.Console({
+    format: winston.format.simple()
+  }))
+}
+
 const logger = winston.createLogger({
   level: 'info',
   transports,
 })
 
-// Writes some log entries
-logger.error('warp nacelles offline')
-logger.info('shields at 99%')
+// // Writes some log entries
+// logger.error('warp nacelles offline')
+// logger.info('shields at 99%')
 
 export default logger
