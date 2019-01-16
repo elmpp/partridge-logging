@@ -1,10 +1,9 @@
 // import winston from 'winston'
 import winston from 'winston'
-import * as StackDriverModule from "@google-cloud/logging-winston" // https://goo.gl/wcwLaK
+import * as StackDriverModule from '@google-cloud/logging-winston' // https://goo.gl/wcwLaK
 import {Config} from 'partridge-config'
 
-
-describe("partridge-logging-index", () => {
+describe('partridge-logging-index', () => {
   let stackDriverTransportSpy: any
   let mockStackDriver: any
   let createLoggerSpy: any
@@ -12,30 +11,30 @@ describe("partridge-logging-index", () => {
   beforeEach(() => {
     mockStackDriver = new StackDriverModule.LoggingWinston()
     stackDriverTransportSpy = jest.fn(() => mockStackDriver)
-    jest.spyOn(StackDriverModule, "LoggingWinston").mockImplementation(stackDriverTransportSpy)
-    createLoggerSpy = jest.spyOn(winston, "createLogger").mockImplementation(() =>({}))
-  });
+    jest.spyOn(StackDriverModule, 'LoggingWinston').mockImplementation(stackDriverTransportSpy)
+    createLoggerSpy = jest.spyOn(winston, 'createLogger').mockImplementation(() => ({}))
+  })
   afterEach(() => {
     jest.resetAllMocks()
   })
 
-  it("attaches stackDriver transport when config specifies on", () => {
+  it('attaches stackDriver transport when config specifies on', () => {
     const mockConfig: Partial<Config> = {logging: {stackDriverEnable: true, consoleEnable: false}}
-    jest.doMock("partridge-config", () => ({config: mockConfig}))
-    require("../index")
-    
+    jest.doMock('partridge-config', () => ({config: mockConfig}))
+    require('../index')
+
     expect(stackDriverTransportSpy).toHaveBeenCalledTimes(1)
     expect(createLoggerSpy.mock.calls[0][0].transports).toContain(mockStackDriver)
   })
-  
-  it("does not attach stackDriver transport when config specifies off", () => {
+
+  it('does not attach stackDriver transport when config specifies off', () => {
     const mockConfig: Partial<Config> = {logging: {stackDriverEnable: false, consoleEnable: false}}
-    jest.doMock("partridge-config", () => ({config: mockConfig}))
-    require("../index")
-    
+    jest.doMock('partridge-config', () => ({config: mockConfig}))
+    require('../index')
+
     expect(stackDriverTransportSpy).not.toHaveBeenCalled()
   })
-  
+
   // it("attaches console transport when config specifies on", () => {
   //   const mockConfig: Partial<Config> = {logging: {stackDriverEnable: true, consoleEnable: true}}
   //   jest.doMock("partridge-config", () => ({config: mockConfig}))
