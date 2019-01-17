@@ -1,6 +1,6 @@
 {
   "name": "partridge-logging",
-  "version": "0.44.0",
+  "version": "0.45.0-prerelease.0",
   "description": "Provides logging services to other packages",
   "keywords": [
     "logging"
@@ -25,7 +25,7 @@
     "@google-cloud/logging-winston": "^0.10.2",
     "@types/debug": "^0.0.31",
     "debug": "^4.1.1",
-    "partridge-config": "github:elmpp/partridge-config#v0.44.0",
+    "partridge-config": "github:elmpp/partridge-config#v0.45.0-prerelease.0",
     "winston": "^3.1.0"
   },
   "main": "lib/index.js",
