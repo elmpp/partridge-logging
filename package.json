@@ -16,6 +16,7 @@
     "build": "tsc -p tsconfig.build.json",
     "dev": "npm run build -- --watch",
     "test": "echo \"Error: run tests from root\" && exit 1",
+    "transpile": "npm run build",
     "type-check": "tsc --noEmit"
   },
   "bugs": {
