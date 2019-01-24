@@ -25,13 +25,16 @@
   "dependencies": {
     "@google-cloud/logging-winston": "^0.10.2",
     "@types/debug": "^0.0.31",
+    "@types/lodash.pick": "^4.4.4",
     "debug": "^4.1.1",
+    "lodash.pick": "^4.4.0",
     "partridge-config": "github:elmpp/partridge-config#v0.47.0",
     "winston": "^3.1.0"
   },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "devDependencies": {
+    "@types/node": "^10.12.18",
     "@types/winston": "^2.4.4"
   }
 }

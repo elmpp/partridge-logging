@@ -1,13 +1,6 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "lib",
-    "lib": ["es2015", "dom"]
+    "module": "esnext",
   },
-  "include": ["src/**/*.ts"],
-  "exclude": [
-    "src/**/__tests__/**/*",
-    "src/**/__mocks__/**/*"
-  ]
 }
