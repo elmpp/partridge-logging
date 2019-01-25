@@ -2,6 +2,12 @@ import {LogLevel, LoggingProvider, Dumpables, Dumpable, DumpableKey} from './__t
 import format from './formatters'
 import * as util from 'util'
 import {DumpableError} from './dumpable-error'
+import mapValues from 'lodash.mapvalues'
+
+interface LogOptions {
+  dumpables?: Dumpables
+  label: string
+}
 
 export class Logger {
   // readonly means it'll be assigned automatically to class property
@@ -14,44 +20,48 @@ export class Logger {
   logProvider: LoggingProvider
   defaultLogLevel: LogLevel
 
-  log(logLevel: LogLevel, message: string, dumpables?: Dumpables): this
-  log(message: string, dumpables?: Dumpables): this
-  log(logLevelOrMessage: any, messageOrDumpables?: any, dumpablesArg?: any): this {
+  log(logLevel: LogLevel, message: string, options?: LogOptions): this
+  log(message: string, options?: LogOptions): this
+  log(logLevelOrMessage: any, messageOrOptions?: any, optionsArg?: any): this {
     let logLevel: LogLevel = this.defaultLogLevel
     let message: string
-    let dumpables: Dumpables
+    let options: LogOptions
 
     // level is not supplied
-    if (typeof messageOrDumpables === 'object' && messageOrDumpables !== null) {
+    if (typeof messageOrOptions === 'object' && messageOrOptions !== null) {
       message = logLevelOrMessage
-      dumpables = messageOrDumpables
+      options = messageOrOptions
       // level and message supplied
-    } else if (typeof logLevelOrMessage === 'string' && typeof messageOrDumpables === 'string') {
+    } else if (typeof logLevelOrMessage === 'string' && typeof messageOrOptions === 'string') {
       logLevel = logLevelOrMessage as LogLevel
-      message = messageOrDumpables
-      dumpables = dumpablesArg
+      message = messageOrOptions
+      options = optionsArg
     } else {
-      throw new DumpableError('Unrecognised log calls', {logLevelOrMessage, messageOrDumpables, dumpablesArg})
+      throw new DumpableError('Unrecognised log calls', {logLevelOrMessage, messageOrOptions, optionsArg})
     }
+
+    const {dumpables, ...winstonOptions} = options
 
     if (dumpables) {
       this.logProvider.log({
         level: logLevel,
         message: util.format('%s ::: %s', message, this.dumpablesFormat(dumpables, logLevel)),
+        ...winstonOptions
       })
       return this
     }
 
-    this.logProvider.log({level: logLevel, message})
+    this.logProvider.log({level: logLevel, message, ...winstonOptions})
     return this
   }
 
   dumpablesFormat(dumpables: Dumpables, logLevel: LogLevel): string {
-    return JSON.stringify(
-      Object.keys(dumpables).map((dumpableKey: DumpableKey) => {
-        const dumpable: Dumpable[] = dumpables[dumpableKey]!
-        return dumpable.map((dumpable: Dumpable) => format(dumpableKey, dumpable, logLevel))
-      })
-    )
+    const formatted = mapValues(dumpables, (dumpables: Dumpable[], dumpableKey: DumpableKey) => {
+      if (dumpables.length === 1) {
+        return format(dumpableKey, dumpables[0], logLevel)
+      }
+      return dumpables.map((dumpable: Dumpable) => format(dumpableKey, dumpable, logLevel))
+    })
+    return JSON.stringify(formatted)
   }
 }

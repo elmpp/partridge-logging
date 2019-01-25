@@ -2,7 +2,7 @@
 import {createLogger, format, transports as winstonTransports} from 'winston'
 import {config} from 'partridge-config'
 import {LoggingWinston} from '@google-cloud/logging-winston'
-const {combine, timestamp, printf} = format
+const {combine, timestamp, label, printf} = format
 
 import debugFun, {IDebugger} from 'debug'
 import { Logger } from './logger';
@@ -33,6 +33,7 @@ debug(`Logging transports: ${JSON.stringify([...transports.keys()])}`)
 const logProvider = createLogger({
   format: combine(
     // https://goo.gl/mF7Y2d
+    label({ label: 'DEFAULT LABEL' }),
     timestamp(),
     myFormat
   ),
