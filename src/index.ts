@@ -47,5 +47,5 @@ const logger = new Logger(logProvider, config.logging.level as LogLevel)
 // logger.error('warp nacelles offline')
 // logger.info('shields at 99%')
 
-// export default logger
-module.exports = logger
+export default logger
+// module.exports = logger

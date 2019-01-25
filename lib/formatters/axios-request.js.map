@@ -1,0 +1,1 @@
+{"version":3,"file":"axios-request.js","sourceRoot":"","sources":["../../src/formatters/axios-request.ts"],"names":[],"mappings":"AAEA,OAAO,IAAI,MAAM,aAAa,CAAA;AAE9B,MAAM,SAAS,GAAe,CAAC,QAA4B,EAAE,SAAmB,EAAE,EAAE;IAClF,MAAM,IAAI,GAAG,IAAI,CAAC,QAAQ,EAAE,CAAC,KAAK,EAAE,SAAS,CAAC,CAAC,CAAA;IAC/C,OAAO,IAAI,CAAA;AACb,CAAC,CAAA;AAED,eAAe,SAAS,CAAA"}
