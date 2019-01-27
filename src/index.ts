@@ -1,4 +1,7 @@
-// https://goo.gl/wcwLaK
+/**
+ *  - google stackdriver logging - https://goo.gl/wcwLaK
+ *  - winston - https://goo.gl/EPBvF3
+ */ 
 import {createLogger, format, transports as winstonTransports} from 'winston'
 import {config} from 'partridge-config'
 import {LoggingWinston} from '@google-cloud/logging-winston'
@@ -16,18 +19,20 @@ const myFormat = printf(info => {
 
 const transports = new Map()
 
-// the config will drive what transports we attach to our logging instance
 if (config.logging.stackDriverEnable) {
-  // const {LoggingWinston} = require('@google-cloud/logging-winston')
-  const loggingWinstonIns = new LoggingWinston()
+  const loggingWinstonIns = new LoggingWinston({projectId: config.environment.GCE_PROJECT_ID, keyFilename: config.environment.GCE_KEY_FILENAME}) // options api - https://goo.gl/HBrj6a
 
   // Logs will be written to: "projects/YOUR_PROJECT_ID/logs/winston_log"
   transports.set('stackDriver', loggingWinstonIns)
+
+  // @todo add a stackdriver transport for facilitating stackdriver events
+  // these will effectively do as an ELK-style system
 }
 
 if (config.logging.consoleEnable) {
   transports.set('console', new winstonTransports.Console())
 }
+
 
 debug(`Logging transports: ${JSON.stringify([...transports.keys()])}`)
 const logProvider = createLogger({
@@ -37,7 +42,7 @@ const logProvider = createLogger({
     timestamp(),
     myFormat
   ),
-  level: config.logging.level,    
+  level: config.logging.level,
   transports: [...transports.values()],
 })
 

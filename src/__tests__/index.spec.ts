@@ -23,25 +23,35 @@ describe('partridge-logging-index', () => {
     jest.resetModules() // lifesaver
   })
 
-  it('attaches stackDriver transport when config specifies on', () => {
-    const mockConfig: Partial<Config> = {logging: {level: 'warn', stackDriverEnable: true, consoleEnable: false}}
+  it('attaches stackDriver transport when config specifies on when outside google cloud', () => {
+    const mockConfig: Partial<Config> = {
+      environment: {GCE_PROJECT_ID: 'partridge-alan', GCE_KEY_FILENAME: '/path/to/filename.json'},
+      logging: {level: 'warn', stackDriverEnable: true, consoleEnable: false}
+    }
     jest.doMock('partridge-config', () => ({config: mockConfig}))
     require('../index')
-
+    
     expect(stackDriverTransportSpy).toHaveBeenCalledTimes(1)
+    expect(stackDriverTransportSpy.mock.calls[0][0]).toEqual(expect.objectContaining({projectId: 'partridge-alan', keyFilename: '/path/to/filename.json'})) // https://goo.gl/GLPD4j
     expect(winstonCreateLoggerSpy.mock.calls[0][0].transports).toContain(mockStackDriver)
   })
-
+  
   it('does not attach stackDriver transport when config specifies off', () => {
-    const mockConfig: Partial<Config> = {logging: {level: 'warn', stackDriverEnable: false, consoleEnable: false}}
+    const mockConfig: Partial<Config> = {
+      environment: {GCE_PROJECT_ID: 'partridge-alan'},
+      logging: {level: 'warn', stackDriverEnable: false, consoleEnable: false}
+    }
     jest.doMock('partridge-config', () => ({config: mockConfig}))
     require('../index')
-
+    
     expect(stackDriverTransportSpy).not.toHaveBeenCalled()
   })
   
   it('Creates Logger instance', () => {
-    const mockConfig: Partial<Config> = {logging: {level: 'warn', stackDriverEnable: false, consoleEnable: false}}
+    const mockConfig: Partial<Config> = {
+      environment: {GCE_PROJECT_ID: 'partridge-alan'},
+      logging: {level: 'warn', stackDriverEnable: false, consoleEnable: false}
+    }
     jest.doMock('partridge-config', () => ({config: mockConfig}))
     
     require('../index')
