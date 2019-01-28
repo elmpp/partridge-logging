@@ -1,7 +1,9 @@
 import { LogLevel, LoggingProvider, Dumpables } from './__types__';
 interface LogOptions {
     dumpables?: Dumpables;
-    label: string;
+    runtime_label?: string;
+    labels?: object;
+    [index: string]: any;
 }
 export declare class Logger {
     constructor(logProvider: LoggingProvider, defaultLogLevel: LogLevel);

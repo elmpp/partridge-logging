@@ -10,35 +10,39 @@ const {combine, timestamp, label, printf} = format
 import debugFun, {IDebugger} from 'debug'
 import { Logger } from './logger';
 import { LogLevel } from './__types__';
+import { TransformableInfo } from 'logform';
 const debug: IDebugger = debugFun('logging:setup')
 debug.log = console.log.bind(console) // https://goo.gl/KMfmSi
 
-const myFormat = printf(info => {
-  return `${info.timestamp} [${info.label}] ${info.level}: ${info.message}`
+const myFormat = printf((info: TransformableInfo) => {
+  return `${info.timestamp} ${info.runtime_label ? '[' + info.runtime_label + ']' : ''} ${info.level}: ${info.message}`
 })
 
 const transports = new Map()
 
 if (config.logging.stackDriverEnable) {
-  const loggingWinstonIns = new LoggingWinston({projectId: config.environment.GCE_PROJECT_ID, keyFilename: config.environment.GCE_KEY_FILENAME}) // options api - https://goo.gl/HBrj6a
+  const loggingWinstonIns = new LoggingWinston({ // options api - https://goo.gl/HBrj6a
+    projectId: config.environment.GCE_PROJECT_ID, 
+    keyFilename: config.environment.GCE_KEY_FILENAME
+  }) 
 
-  // Logs will be written to: "projects/YOUR_PROJECT_ID/logs/winston_log"
+  // Logs will be written to: "projects/YOUR_PROJECT_ID/logs/winston_log" on GKE
   transports.set('stackDriver', loggingWinstonIns)
-
-  // @todo add a stackdriver transport for facilitating stackdriver events
-  // these will effectively do as an ELK-style system
 }
 
 if (config.logging.consoleEnable) {
   transports.set('console', new winstonTransports.Console())
 }
 
-
 debug(`Logging transports: ${JSON.stringify([...transports.keys()])}`)
+
 const logProvider = createLogger({
   format: combine(
     // https://goo.gl/mF7Y2d
-    label({ label: 'DEFAULT LABEL' }),
+    label({ 
+      // label: 'DEFAULT LABEL',
+      message: false 
+    }),
     timestamp(),
     myFormat
   ),

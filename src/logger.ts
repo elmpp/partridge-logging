@@ -6,7 +6,9 @@ import mapValues from 'lodash.mapvalues'
 
 interface LogOptions {
   dumpables?: Dumpables
-  label: string
+  runtime_label?: string
+  labels?: object
+  [index: string]: any
 }
 
 export class Logger {
@@ -45,8 +47,9 @@ export class Logger {
     if (dumpables) {
       this.logProvider.log({
         level: logLevel,
-        message: util.format('%s ::: %s', message, this.dumpablesFormat(dumpables, logLevel)),
-        ...winstonOptions
+        // message,
+        message,
+        ...options
       })
       return this
     }
