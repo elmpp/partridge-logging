@@ -1,4 +1,4 @@
-import {Logger} from '../logger'
+import {Logger, LogOptions} from '../logger'
 
 describe('logger', () => {
   const winstonLoggerMock = {log: jest.fn()} as any
@@ -12,17 +12,13 @@ describe('logger', () => {
       },
     }
 
-    logger.log('error', 'Test Message', {label: 'AXIOS', dumpables: {axiosRequest: [axiosRequestMock]}})
+    const logOptions: LogOptions = {runtime_label: 'AXIOS', dumpables: {axiosRequest: [axiosRequestMock]}}
+    logger.log('error', 'Test Message', logOptions)
 
     expect(winstonLoggerMock.log).toHaveBeenCalled()
     expect(winstonLoggerMock.log.mock.calls[0][0]).toHaveProperty('level', 'error')
-    expect(winstonLoggerMock.log.mock.calls[0][0]).toHaveProperty('label', 'AXIOS')
+    expect(winstonLoggerMock.log.mock.calls[0][0]).toHaveProperty('runtime_label', logOptions.runtime_label)
+    expect(winstonLoggerMock.log.mock.calls[0][0]).toHaveProperty('dumpables', logOptions.dumpables)
     expect(winstonLoggerMock.log.mock.calls[0][0]).toHaveProperty('message')
-
-    // it should have the dumpable at end of message as a json string
-    const dumpableFormatted = JSON.parse(winstonLoggerMock.log.mock.calls[0][0].message.match(/^.+::: ({.*$)/)[1])
-
-    expect(dumpableFormatted).toHaveProperty('axiosRequest')
-    expect(dumpableFormatted.axiosRequest).toEqual(axiosRequestMock) // notice not an array for singular
   })
 })

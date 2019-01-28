@@ -4,7 +4,7 @@ import * as util from 'util'
 import {DumpableError} from './dumpable-error'
 import mapValues from 'lodash.mapvalues'
 
-interface LogOptions {
+export interface LogOptions {
   dumpables?: Dumpables
   runtime_label?: string
   labels?: object
@@ -42,19 +42,18 @@ export class Logger {
       throw new DumpableError('Unrecognised log calls', {logLevelOrMessage, messageOrOptions, optionsArg})
     }
 
-    const {dumpables, ...winstonOptions} = options
+    // const {dumpables, ...winstonOptions} = options
 
-    if (dumpables) {
-      this.logProvider.log({
-        level: logLevel,
-        // message,
-        message,
-        ...options
-      })
-      return this
-    }
+    // if (dumpables) {
+    //   this.logProvider.log({
+    //     level: logLevel,
+    //     message,
+    //     ...options
+    //   })
+    //   return this
+    // }
 
-    this.logProvider.log({level: logLevel, message, ...winstonOptions})
+    this.logProvider.log({level: logLevel, message, ...options})
     return this
   }
 

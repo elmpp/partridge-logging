@@ -1,5 +1,5 @@
 import { LogLevel, LoggingProvider, Dumpables } from './__types__';
-interface LogOptions {
+export interface LogOptions {
     dumpables?: Dumpables;
     runtime_label?: string;
     labels?: object;
@@ -13,5 +13,4 @@ export declare class Logger {
     log(message: string, options?: LogOptions): this;
     dumpablesFormat(dumpables: Dumpables, logLevel: LogLevel): string;
 }
-export {};
 //# sourceMappingURL=logger.d.ts.map
