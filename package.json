@@ -15,6 +15,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "dev": "npm run build -- --watch",
+    "lint": "npm run type-check",
     "test": "echo \"Error: run tests from root\" && exit 1",
     "transpile": "npm run build",
     "type-check": "tsc --noEmit"

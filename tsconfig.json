@@ -7,9 +7,5 @@
     "lib": ["es7"], // no need for DOM stuff etc as node app
   },
   "include": ["src/**/*.ts"],
-  "exclude": [
-    "src/**/__tests__/**/*",
-    "src/**/__mocks__/**/*"
-  ],
   "files": ["../typings/index.d.ts"],
 }

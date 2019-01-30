@@ -14,7 +14,7 @@ describe('axios-request', () => {
     }
     const expected = pick(dumpable, ['url', 'headers'])
 
-    const formatted = format(dumpable, 'warning')
+    const formatted = format(dumpable, 'warn')
 
     expect(formatted).toEqual(expect.objectContaining(expected))
   })
