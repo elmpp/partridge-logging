@@ -6,7 +6,7 @@ import mapValues from 'lodash.mapvalues'
 
 export interface LogOptions {
   dumpables?: Dumpables
-  runtime_label?: string
+  runtime_label?: 'APOLLO' | 'BOOTSTRAP'
   labels?: object
   [index: string]: any
 }
