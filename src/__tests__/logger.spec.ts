@@ -2,7 +2,7 @@ import {Logger, LogOptions} from '../logger'
 
 describe('logger', () => {
   const winstonLoggerMock = {log: jest.fn()} as any
-  const logger = new Logger(winstonLoggerMock, 'warning')
+  const logger = new Logger(winstonLoggerMock, 'warn')
 
   it('delegates calls to the (winston) logging provider', () => {
     const axiosRequestMock = {
@@ -16,9 +16,9 @@ describe('logger', () => {
     logger.log('error', 'Test Message', logOptions)
 
     expect(winstonLoggerMock.log).toHaveBeenCalled()
-    expect(winstonLoggerMock.log.mock.calls[0][0]).toHaveProperty('level', 'error')
-    expect(winstonLoggerMock.log.mock.calls[0][0]).toHaveProperty('runtime_label', logOptions.runtime_label)
-    expect(winstonLoggerMock.log.mock.calls[0][0]).toHaveProperty('dumpables', logOptions.dumpables)
-    expect(winstonLoggerMock.log.mock.calls[0][0]).toHaveProperty('message')
+    expect(winstonLoggerMock.log.mock.calls[0][0]).toEqual('error')
+    expect(winstonLoggerMock.log.mock.calls[0][1]).toEqual('Test Message')
+    expect(winstonLoggerMock.log.mock.calls[0][2]).toHaveProperty('runtime_label', logOptions.runtime_label)
+    expect(winstonLoggerMock.log.mock.calls[0][2]).toHaveProperty('dumpables', logOptions.dumpables)
   })
 })

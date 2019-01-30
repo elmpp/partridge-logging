@@ -6,7 +6,7 @@ import mapValues from 'lodash.mapvalues'
 
 export interface LogOptions {
   dumpables?: Dumpables
-  runtime_label?: 'APOLLO' | 'BOOTSTRAP'
+  runtime_label?: 'APOLLO' | 'BOOTSTRAP' | 'AXIOS'
   labels?: object
   [index: string]: any
 }
@@ -42,18 +42,7 @@ export class Logger {
       throw new DumpableError('Unrecognised log calls', {logLevelOrMessage, messageOrOptions, optionsArg})
     }
 
-    // const {dumpables, ...winstonOptions} = options
-
-    // if (dumpables) {
-    //   this.logProvider.log({
-    //     level: logLevel,
-    //     message,
-    //     ...options
-    //   })
-    //   return this
-    // }
-
-    this.logProvider.log({level: logLevel, message, ...options})
+    this.logProvider.log(logLevel, message, {...options})
     return this
   }
 
