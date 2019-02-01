@@ -1,6 +1,6 @@
 {
   "name": "partridge-logging",
-  "version": "0.50.0-prerelease.0",
+  "version": "0.50.0",
   "description": "Provides logging services to other packages",
   "keywords": [
     "logging"
@@ -30,7 +30,7 @@
     "debug": "^4.1.1",
     "lodash.mapvalues": "^4.6.0",
     "lodash.pick": "^4.4.0",
-    "partridge-config": "github:elmpp/partridge-config#v0.50.0-prerelease.0",
+    "partridge-config": "github:elmpp/partridge-config#v0.50.0",
     "winston": "^3.1.0"
   },
   "main": "lib/index.js",
