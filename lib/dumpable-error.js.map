@@ -1,1 +1,1 @@
-{"version":3,"file":"dumpable-error.js","sourceRoot":"","sources":["../src/dumpable-error.ts"],"names":[],"mappings":";;AAEA,MAAa,aAAc,SAAQ,KAAK;IACtC,YAAY,OAAe,EAAW,SAAoB;QACxD,KAAK,CAAC,OAAO,CAAC,CAAA;QADsB,cAAS,GAAT,SAAS,CAAW;IAE1D,CAAC;CACF;AAJD,sCAIC"}
+{"version":3,"file":"dumpable-error.js","sourceRoot":"","sources":["../src/dumpable-error.ts"],"names":[],"mappings":";;AAEA,mBAA2B,SAAQ,KAAK;IACtC,YAAY,OAAe,EAAW,SAAoB;QACxD,KAAK,CAAC,OAAO,CAAC,CAAA;QADsB,cAAS,GAAT,SAAS,CAAW;IAE1D,CAAC;CACF;AAJD,sCAIC"}

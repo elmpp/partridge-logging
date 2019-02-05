@@ -1,1 +1,1 @@
-{"version":3,"file":"dumpable-error.d.ts","sourceRoot":"","sources":["../src/dumpable-error.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAE,MAAM,aAAa,CAAC;AAExC,qBAAa,aAAc,SAAQ,KAAK;IACT,QAAQ,CAAC,SAAS,EAAE,SAAS;gBAA9C,OAAO,EAAE,MAAM,EAAW,SAAS,EAAE,SAAS;CAG3D"}
+{"version":3,"file":"dumpable-error.d.ts","sourceRoot":"","sources":["../src/dumpable-error.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAE,MAAM,aAAa,CAAC;AAExC,kCAA2B,SAAQ,KAAK;IACT,QAAQ,CAAC,SAAS,EAAE,SAAS;gBAA9C,OAAO,EAAE,MAAM,EAAW,SAAS,EAAE,SAAS;CAG3D"}
