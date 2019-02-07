@@ -7,6 +7,8 @@ import {createLogger, format, config as winstonConfig, transports as winstonTran
 import {config} from 'partridge-config'
 const {combine, timestamp, label, printf} = format
 
+export * from './dumpable-error'
+
 import debugFun, {IDebugger} from 'debug'
 import {Logger} from './logger'
 import {LogLevel} from './__types__'

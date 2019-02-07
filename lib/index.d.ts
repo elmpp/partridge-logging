@@ -1,3 +1,4 @@
+export * from './dumpable-error';
 import { Logger } from './logger';
 export { DumpableError } from './dumpable-error';
 declare const logger: Logger;
