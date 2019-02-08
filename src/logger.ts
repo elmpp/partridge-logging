@@ -1,6 +1,6 @@
 import {LogLevel, LoggingProvider, Dumpables, Dumpable, DumpableKey} from './__types__'
 import format from './formatters'
-import {DumpableError} from './dumpable-error'
+import DumpableError from './dumpable-error'
 import mapValues from 'lodash.mapvalues'
 
 export interface LogOptions {

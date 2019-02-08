@@ -3,18 +3,16 @@
  *  - winston - https://goo.gl/EPBvF3
  */
 
-import {createLogger, format, config as winstonConfig, transports as winstonTransports} from 'winston'
+export {default as DumpableError} from './dumpable-error'
+import {createLogger, format, transports as winstonTransports} from 'winston'
 import {config} from 'partridge-config'
 const {combine, timestamp, label, printf} = format
 
-export * from './dumpable-error'
 
 import debugFun, {IDebugger} from 'debug'
 import {Logger} from './logger'
 import {LogLevel} from './__types__'
 import {TransformableInfo} from 'logform'
-
-export {DumpableError} from './dumpable-error'
 
 const debug: IDebugger = debugFun('logging:setup')
 debug.log = console.log.bind(console) // https://goo.gl/KMfmSi
@@ -66,4 +64,6 @@ const logger = new Logger(logProvider, config.logging.level as LogLevel)
 
 export default logger
 
-export {Logger}
+export {
+  Logger,
+}

@@ -1,5 +1,5 @@
 import { Dumpables } from "./__types__";
-export declare class DumpableError extends Error {
+export default class DumpableError extends Error {
     readonly dumpables: Dumpables;
     constructor(message: string, dumpables: Dumpables);
 }

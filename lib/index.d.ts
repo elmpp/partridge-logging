@@ -1,7 +1,6 @@
-export * from './dumpable-error';
+export { default as DumpableError } from './dumpable-error';
 import { Logger } from './logger';
-export { DumpableError } from './dumpable-error';
 declare const logger: Logger;
 export default logger;
-export { Logger };
+export { Logger, };
 //# sourceMappingURL=index.d.ts.map

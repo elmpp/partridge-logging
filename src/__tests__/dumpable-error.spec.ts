@@ -1,4 +1,4 @@
-import {DumpableError} from '../dumpable-error'
+import DumpableError from '../dumpable-error'
 
 it('works', () => {
   const dumpable1: any = {something1: 'else1'}

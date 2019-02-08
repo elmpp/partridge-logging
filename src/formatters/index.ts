@@ -1,6 +1,6 @@
 import axiosRequestFormatter from './axios-request'
 import {Dumpable, DumpableKey, LogLevel} from '../__types__'
-import { DumpableError } from '../dumpable-error';
+import DumpableError from '../dumpable-error';
 
 const format = (dumpableKey: DumpableKey, dumpable: Dumpable, logLevel: LogLevel) => {
   switch (dumpableKey) {
