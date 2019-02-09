@@ -11,6 +11,6 @@ export declare class Logger {
     defaultLogLevel: LogLevel;
     log(logLevel: LogLevel, message: string, options?: LogOptions): this;
     log(message: string, options?: LogOptions): this;
-    dumpablesFormat(dumpables: Dumpables, logLevel: LogLevel): string;
+    optionsReducer(options: LogOptions, logLevel: LogLevel): LogOptions;
 }
 //# sourceMappingURL=logger.d.ts.map

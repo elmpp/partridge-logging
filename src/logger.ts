@@ -41,17 +41,31 @@ export class Logger {
       throw new DumpableError('Unrecognised log calls', {logLevelOrMessage, messageOrOptions, optionsArg})
     }
 
-    this.logProvider.log(logLevel, message, {...options})
+    this.logProvider.log(logLevel, message, this.optionsReducer(options, logLevel))
     return this
   }
 
-  dumpablesFormat(dumpables: Dumpables, logLevel: LogLevel): string {
-    const formatted = mapValues(dumpables, (dumpables: Dumpable[], dumpableKey: DumpableKey) => {
-      if (dumpables.length === 1) {
-        return format(dumpableKey, dumpables[0], logLevel)
+  optionsReducer(options: LogOptions, logLevel: LogLevel): LogOptions {
+    if (options.dumpables && Object.keys(options.dumpables).length !== 0) {
+      options = {
+        ...options,
+        dumpables: mapValues(options.dumpables, (dumpables: Dumpable[], dumpableKey: DumpableKey) => {
+          if (dumpables.length === 1) {
+            return format(dumpableKey, dumpables[0], logLevel)
+          }
+          return dumpables.map((dumpable: Dumpable) => format(dumpableKey, dumpable, logLevel))
+        })
       }
-      return dumpables.map((dumpable: Dumpable) => format(dumpableKey, dumpable, logLevel))
-    })
-    return JSON.stringify(formatted)
+    }
+    return options
   }
+  // optionsReducer(dumpables: Dumpables, logLevel: LogLevel): string {
+  //   const formatted = mapValues(dumpables, (dumpables: Dumpable[], dumpableKey: DumpableKey) => {
+  //     if (dumpables.length === 1) {
+  //       return format(dumpableKey, dumpables[0], logLevel)
+  //     }
+  //     return dumpables.map((dumpable: Dumpable) => format(dumpableKey, dumpable, logLevel))
+  //   })
+  //   return JSON.stringify(formatted)
+  // }
 }

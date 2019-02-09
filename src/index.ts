@@ -7,18 +7,20 @@ export {default as DumpableError} from './dumpable-error'
 import {createLogger, format, transports as winstonTransports} from 'winston'
 import {config} from 'partridge-config'
 const {combine, timestamp, label, printf} = format
-
-
 import debugFun, {IDebugger} from 'debug'
 import {Logger} from './logger'
 import {LogLevel} from './__types__'
 import {TransformableInfo} from 'logform'
+import util from 'util'
 
 const debug: IDebugger = debugFun('logging:setup')
 debug.log = console.log.bind(console) // https://goo.gl/KMfmSi
 
 const myFormat = printf((info: TransformableInfo) => {
   return `${info.timestamp} ${info.runtime_label ? '[' + info.runtime_label + ']' : ''} ${info.level}: ${info.message}`
+})
+const myFormatWithDumpables = printf((info: TransformableInfo) => {
+  return `${info.timestamp} ${info.runtime_label ? '[' + info.runtime_label + ']' : ''} ${info.level}: ${info.message} dumpables: ${util.inspect(info.dumpables || {})}`
 })
 
 const transports = new Map()
@@ -41,7 +43,8 @@ if (process.env.APP_ENV !== 'browser') {
 }
 
 if (config.logging.consoleEnable) {
-  transports.set('console', new winstonTransports.Console())
+  // @TODO - remove myFormatWithDumpables once released
+  transports.set('console', new winstonTransports.Console({format: myFormatWithDumpables}))
 }
 
 debug(`Logging transports: ${JSON.stringify([...transports.keys()])}`)
