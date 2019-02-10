@@ -1,10 +1,4 @@
-import { LogLevel, LoggingProvider, Dumpables } from './__types__';
-export interface LogOptions {
-    dumpables?: Dumpables;
-    runtime_label?: 'APOLLO' | 'BOOTSTRAP' | 'AXIOS';
-    labels?: object;
-    [index: string]: any;
-}
+import { LogLevel, LoggingProvider, LogOptions } from './__types__';
 export declare class Logger {
     constructor(logProvider: LoggingProvider, defaultLogLevel: LogLevel);
     logProvider: LoggingProvider;

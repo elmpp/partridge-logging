@@ -13,14 +13,17 @@ import {LogLevel} from './__types__'
 import {TransformableInfo} from 'logform'
 import util from 'util'
 
+export * from './__types__'
+
 const debug: IDebugger = debugFun('logging:setup')
 debug.log = console.log.bind(console) // https://goo.gl/KMfmSi
 
-const myFormat = printf((info: TransformableInfo) => {
+const myFormat = printf((info: TransformableInfo) => { // this can be taken as a `LogOptions` 
   return `${info.timestamp} ${info.runtime_label ? '[' + info.runtime_label + ']' : ''} ${info.level}: ${info.message}`
 })
+
 const myFormatWithDumpables = printf((info: TransformableInfo) => {
-  return `${info.timestamp} ${info.runtime_label ? '[' + info.runtime_label + ']' : ''} ${info.level}: ${info.message} dumpables: ${util.inspect(info.dumpables || {})}`
+  return `${info.timestamp} ${info.runtime_label ? '[' + info.runtime_label + ']' : ''} ${info.level}: ${info.message} dumpables: ${util.inspect(info.dumpables || {}, {showHidden: false, depth: null})}` // tslint:disable-line
 })
 
 const transports = new Map()
@@ -47,7 +50,7 @@ if (config.logging.consoleEnable) {
   transports.set('console', new winstonTransports.Console({format: myFormatWithDumpables}))
 }
 
-debug(`Logging transports: ${JSON.stringify([...transports.keys()])}`)
+debug(`Logging: ${JSON.stringify({transports: [...transports.keys()], level: config.logging.level})}`)
 
 const logProvider = createLogger({
   format: combine(

@@ -1,14 +1,8 @@
-import {LogLevel, LoggingProvider, Dumpables, Dumpable, DumpableKey} from './__types__'
-import format from './formatters'
+import {LogLevel, LoggingProvider, Dumpable, DumpableKey, LogOptions} from './__types__'
+import format from './format'
 import DumpableError from './dumpable-error'
 import mapValues from 'lodash.mapvalues'
 
-export interface LogOptions {
-  dumpables?: Dumpables
-  runtime_label?: 'APOLLO' | 'BOOTSTRAP' | 'AXIOS'
-  labels?: object
-  [index: string]: any
-}
 
 export class Logger {
   // readonly means it'll be assigned automatically to class property
