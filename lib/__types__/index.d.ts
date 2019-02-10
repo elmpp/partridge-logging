@@ -9,7 +9,6 @@ export interface Dumpables {
 export declare type Dumpable = AxiosRequestConfig | AxiosResponse | Formattable;
 export declare type DumpableKey = 'axiosRequest' | 'axiosResponse' | string;
 export declare type LoggingProvider = winston.Logger;
-export declare type LogLevel = 'error' | 'warn' | 'info' | 'verbose' | 'debug' | 'silly';
 export interface LogOptions {
     dumpables?: Dumpables;
     runtime_label: 'APOLLO' | 'BOOTSTRAP' | 'AXIOS' | 'IMPORTER' | '';

@@ -12,8 +12,8 @@ export type DumpableKey = 'axiosRequest' | 'axiosResponse' | string
 
 export type LoggingProvider = winston.Logger
 
-// https://goo.gl/MLZ3nQ
-export type LogLevel = 'error' | 'warn' | 'info' | 'verbose' | 'debug' | 'silly'
+// // https://goo.gl/MLZ3nQ
+// export type LogLevel = 'error' | 'warn' | 'info' | 'verbose' | 'debug' | 'silly'
 
 export interface LogOptions {
   dumpables?: Dumpables
