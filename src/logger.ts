@@ -1,4 +1,4 @@
-import {LogLevel, LoggingProvider, Dumpable, DumpableKey, LogOptions} from './__types__'
+import {LoggingProvider, Dumpable, DumpableKey, LogOptions} from './__types__'
 import format from './format'
 import DumpableError from './dumpable-error'
 import mapValues from 'lodash.mapvalues'
@@ -53,13 +53,4 @@ export class Logger {
     }
     return options
   }
-  // optionsReducer(dumpables: Dumpables, logLevel: LogLevel): string {
-  //   const formatted = mapValues(dumpables, (dumpables: Dumpable[], dumpableKey: DumpableKey) => {
-  //     if (dumpables.length === 1) {
-  //       return format(dumpableKey, dumpables[0], logLevel)
-  //     }
-  //     return dumpables.map((dumpable: Dumpable) => format(dumpableKey, dumpable, logLevel))
-  //   })
-  //   return JSON.stringify(formatted)
-  // }
 }

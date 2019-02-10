@@ -1,4 +1,4 @@
-import { LogLevel, LoggingProvider, LogOptions } from './__types__';
+import { LoggingProvider, LogOptions } from './__types__';
 export declare class Logger {
     constructor(logProvider: LoggingProvider, defaultLogLevel: LogLevel);
     logProvider: LoggingProvider;

@@ -9,7 +9,6 @@ import {config} from 'partridge-config'
 const {combine, timestamp, label, printf} = format
 import debugFun, {IDebugger} from 'debug'
 import {Logger} from './logger'
-import {LogLevel} from './__types__'
 import {TransformableInfo} from 'logform'
 import util from 'util'
 

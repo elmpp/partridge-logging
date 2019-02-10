@@ -1,6 +1,5 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import winston from 'winston';
-import { Formattable } from 'org-common/src/__types__/formatters';
 export interface Dumpables {
     axiosRequest?: AxiosRequestConfig[];
     axiosResponse?: AxiosResponse[];

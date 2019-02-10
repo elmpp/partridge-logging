@@ -18,7 +18,7 @@ import logger from 'partridge-logging'
 describe('Stackdriver logging', () => {
   it('should log a standard log entry', () => {
 
-    logger.log('info', 'Test Message', {label: 'TEST LABEL'})
+    logger.log('info', 'Test Message', {runtime_label: 'IMPORTER', label: 'TEST LABEL'})
 
     console.info("CHECK THE GKE LOGS OUTPUT (select \"Global\") - https://goo.gl/jrpvzt")
   })
@@ -30,7 +30,7 @@ describe('Stackdriver logging', () => {
       another_key: 'another_value',
     }
     logger.log('info', 'Test Message 2', {
-      // runtime_label: 'TESTER_LABEL',
+      runtime_label: 'BOOTSTRAP',
       labels: {
         module: 'some-module'
       },

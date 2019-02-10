@@ -1,6 +1,6 @@
 import axiosRequestFormatter from 'org-common/lib/formatters/axios-request'
 import axiosResponseFormatter from 'org-common/lib/formatters/axios-response'
-import {Dumpable, DumpableKey, LogLevel} from './__types__'
+import {Dumpable, DumpableKey} from './__types__'
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 
 function isAxiosRequest(dumpableKey: DumpableKey, _dumpable: Dumpable): _dumpable is AxiosRequestConfig {
