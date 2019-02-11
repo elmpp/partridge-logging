@@ -22,14 +22,17 @@ const myFormat = printf((info: TransformableInfo) => { // this can be taken as a
 })
 
 const myFormatWithDumpables = printf((info: TransformableInfo) => {
-  return `${info.timestamp} ${info.runtime_label ? '[' + info.runtime_label + ']' : ''} ${info.level}: ${info.message} dumpables: ${util.inspect(info.dumpables || {}, {showHidden: false, depth: null})}` // tslint:disable-line
+  if (info.dumpables) {
+    return `${info.timestamp} ${info.runtime_label ? '[' + info.runtime_label + ']' : ''} ${info.level}: ${info.message} dumpables: ${util.inspect(info.dumpables || {}, {showHidden: false, depth: null})}` // tslint:disable-line
+  }
+  return `${info.timestamp} ${info.runtime_label ? '[' + info.runtime_label + ']' : ''} ${info.level}: ${info.message}`
 })
 
 const transports = new Map()
 
 // use this simplistic check as webpack can analyze this. See DefinePlugin of `next.config.js`
 if (process.env.APP_ENV !== 'browser') {
-  const {LoggingWinston} = require('@google-cloud/logging-winston')
+  const {LoggingWinston} = require('@google-cloud/logging-winston') // https://goo.gl/so8Afv
 
   const loggingWinstonIns = new LoggingWinston({
     // options api - https://goo.gl/HBrj6a
@@ -64,6 +67,10 @@ const logProvider = createLogger({
   level: config.logging.level,
   transports: [...transports.values()],
 })
+
+logProvider.on('error', (err: Error) => { 
+  logProvider.log('error', `Error during log provider call. Provider error msg: ${err.message}.`) // handles too-large grpc error
+ })
 
 const logger = new Logger(logProvider, config.logging.level as LogLevel)
 

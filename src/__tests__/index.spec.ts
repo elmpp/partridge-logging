@@ -9,12 +9,13 @@ describe('partridge-logging-index', () => {
   let mockStackDriver: any
   let winstonCreateLoggerSpy: any
   let loggerSpy: jest.Mock<typeof LoggerModule.Logger>
+  let loggerOnMock = jest.fn()
 
   beforeEach(() => {
     mockStackDriver = new StackDriverModule.LoggingWinston()
     stackDriverTransportSpy = jest.fn(() => mockStackDriver)
     jest.spyOn(StackDriverModule, 'LoggingWinston').mockImplementation(stackDriverTransportSpy)
-    winstonCreateLoggerSpy = jest.spyOn(winston, 'createLogger').mockImplementation(() => '__WINSTON_LOGGER')
+    winstonCreateLoggerSpy = jest.spyOn(winston, 'createLogger').mockImplementation(() => ({on: loggerOnMock}))
     loggerSpy = jest.spyOn(LoggerModule, 'Logger').mockImplementation(() => ({clzMethod: '__LOGGER'}))
   })
   afterEach(() => {
@@ -66,7 +67,7 @@ describe('partridge-logging-index', () => {
     
     require('../index')
     
-    expect(loggerSpy.mock.calls[0][0]).toEqual('__WINSTON_LOGGER')
+    expect(loggerSpy.mock.calls[0][0]).toEqual(expect.objectContaining({on: loggerOnMock}))
     expect(loggerSpy.mock.calls[0][1]).toEqual('warn')
   })
   

@@ -17,6 +17,7 @@ export class Logger {
 
   log(logLevel: LogLevel, message: string, options?: LogOptions): this
   log(message: string, options?: LogOptions): this
+  log(logLevel: string, message: string): this
   log(logLevelOrMessage: any, messageOrOptions?: any, optionsArg?: any): this {
     let logLevel: LogLevel = this.defaultLogLevel
     let message: string
@@ -30,12 +31,19 @@ export class Logger {
     } else if (typeof logLevelOrMessage === 'string' && typeof messageOrOptions === 'string') {
       logLevel = logLevelOrMessage as LogLevel
       message = messageOrOptions
-      options = optionsArg
+      options = optionsArg || {}
     } else {
       throw new DumpableError('Unrecognised log calls', {logLevelOrMessage, messageOrOptions, optionsArg})
     }
 
-    this.logProvider.log(logLevel, message, this.optionsReducer(options, logLevel))
+    try {
+      this.logProvider.log(logLevel, message, this.optionsReducer(options, logLevel))
+    }
+    catch (err) {
+      // note that this error handling is actually done in the .on('error') handler in logger index.ts
+      this.logProvider.log('error', `Error during log provider call. Original msg: ${message}. Provider error msg: ${err.message}.`) // handles too-large grpc error
+    }
+
     return this
   }
 
