@@ -26,6 +26,7 @@
   "dependencies": {
     "@google-cloud/logging-winston": "^0.10.2",
     "@types/debug": "^0.0.31",
+    "chalk": "^2.4.2",
     "debug": "^4.1.1",
     "lodash.mapvalues": "^4.6.0",
     "org-common": "^0.50.0",

@@ -16,7 +16,7 @@ export type LoggingProvider = winston.Logger
 
 export interface LogOptions {
   dumpables?: Dumpables
-  runtime_label: 'APOLLO' | 'BOOTSTRAP' | 'AXIOS' | 'IMPORTER' | 'EXPRESS' | 'FRONTEND'
+  runtime_label: 'APOLLO' | 'BOOTSTRAP' | 'AXIOS' | 'IMPORTER' | 'EXPRESS' | 'FRONTEND' | 'TYPEORM'
   labels?: object
   [index: string]: any
 }

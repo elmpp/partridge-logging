@@ -11,21 +11,43 @@ import debugFun, {IDebugger} from 'debug'
 import {Logger} from './logger'
 import {TransformableInfo} from 'logform'
 import util from 'util'
+import { LogOptions } from "./__types__"
+import chalk from 'chalk'
 
 export * from './__types__'
 
 const debug: IDebugger = debugFun('logging:setup')
 debug.log = console.log.bind(console) // https://goo.gl/KMfmSi
 
+const runtimeLabel = (label: LogOptions['runtime_label']) => {
+  switch (label) {
+    case 'APOLLO':
+      return chalk.green(`[${label}]`)
+      case 'AXIOS':
+      return chalk.yellow(`[${label}]`)
+      case 'BOOTSTRAP':
+      return chalk.blue(`[${label}]`)
+      case 'EXPRESS':
+      return chalk.magenta(`[${label}]`)
+      case 'FRONTEND':
+      return chalk.cyan(`[${label}]`)
+      case 'IMPORTER':
+      return chalk.red(`[${label}]`)
+      case 'TYPEORM':
+      return chalk.blueBright(`[${label}]`)
+  }
+  return `[${label}]`
+}
+
 const myFormat = printf((info: TransformableInfo) => { // this can be taken as a `LogOptions` 
-  return `${info.timestamp} ${info.runtime_label ? '[' + info.runtime_label + ']' : ''} ${info.level}: ${info.message}`
+  return `${info.timestamp} ${info.runtime_label ? runtimeLabel(info.runtime_label) : ''} ${info.level}: ${info.message}`
 })
 
 const myFormatWithDumpables = printf((info: TransformableInfo) => {
   if (info.dumpables) {
-    return `${info.timestamp} ${info.runtime_label ? '[' + info.runtime_label + ']' : ''} ${info.level}: ${info.message} dumpables: ${util.inspect(info.dumpables || {}, {showHidden: false, depth: null})}` // tslint:disable-line
+    return `${info.timestamp} ${info.runtime_label ? runtimeLabel(info.runtime_label) : ''} ${info.level}: ${info.message} dumpables: ${util.inspect(info.dumpables || {}, {showHidden: false, depth: null})}` // tslint:disable-line
   }
-  return `${info.timestamp} ${info.runtime_label ? '[' + info.runtime_label + ']' : ''} ${info.level}: ${info.message}`
+  return `${info.timestamp} ${info.runtime_label ? runtimeLabel(info.runtime_label) : ''} ${info.level}: ${info.message}`
 })
 
 const transports = new Map()
