@@ -1,4 +1,4 @@
-import {AxiosRequestConfig, AxiosResponse} from 'axios'
+import {AxiosRequestConfig, AxiosResponse, AxiosError} from 'axios'
 import winston from 'winston'
 
 export interface Dumpables {
@@ -6,8 +6,8 @@ export interface Dumpables {
   axiosResponse?: AxiosResponse[]
   [index: string]: any
 }
-export type Dumpable = AxiosRequestConfig | AxiosResponse | Formattable
-export type DumpableKey = 'axiosRequest' | 'axiosResponse' | string
+export type Dumpable = AxiosRequestConfig | AxiosResponse | AxiosError | Formattable
+export type DumpableKey = 'axiosRequest' | 'axiosResponse' | 'axiosError' | string
 
 export type LoggingProvider = winston.Logger
 

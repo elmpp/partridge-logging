@@ -1,12 +1,12 @@
-import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import winston from 'winston';
 export interface Dumpables {
     axiosRequest?: AxiosRequestConfig[];
     axiosResponse?: AxiosResponse[];
     [index: string]: any;
 }
-export declare type Dumpable = AxiosRequestConfig | AxiosResponse | Formattable;
-export declare type DumpableKey = 'axiosRequest' | 'axiosResponse' | string;
+export declare type Dumpable = AxiosRequestConfig | AxiosResponse | AxiosError | Formattable;
+export declare type DumpableKey = 'axiosRequest' | 'axiosResponse' | 'axiosError' | string;
 export declare type LoggingProvider = winston.Logger;
 export interface LogOptions {
     dumpables?: Dumpables;
