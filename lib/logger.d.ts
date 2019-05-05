@@ -1,16 +1,11 @@
-import { LogLevel, LoggingProvider, Dumpables } from './__types__';
-export interface LogOptions {
-    dumpables?: Dumpables;
-    runtime_label?: 'APOLLO' | 'BOOTSTRAP' | 'AXIOS';
-    labels?: object;
-    [index: string]: any;
-}
+import { LoggingProvider, LogOptions } from './__types__';
 export declare class Logger {
     constructor(logProvider: LoggingProvider, defaultLogLevel: LogLevel);
     logProvider: LoggingProvider;
     defaultLogLevel: LogLevel;
     log(logLevel: LogLevel, message: string, options?: LogOptions): this;
     log(message: string, options?: LogOptions): this;
-    dumpablesFormat(dumpables: Dumpables, logLevel: LogLevel): string;
+    log(logLevel: string, message: string): this;
+    optionsReducer(options: LogOptions, logLevel: LogLevel): LogOptions;
 }
 //# sourceMappingURL=logger.d.ts.map

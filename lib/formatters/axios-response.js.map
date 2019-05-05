@@ -1,0 +1,1 @@
+{"version":3,"file":"axios-response.js","sourceRoot":"","sources":["../../src/formatters/axios-response.ts"],"names":[],"mappings":";;;;;AAEA,8DAA8B;AAE9B,MAAM,SAAS,GAAc,CAAC,QAAuB,EAAE,SAAmB,EAAE,EAAE;IAC5E,MAAM,IAAI,GAAG,qBAAI,CAAC,QAAQ,EAAE,CAAC,QAAQ,EAAE,SAAS,EAAE,MAAM,CAAC,CAAC,CAAA;IAC1D,OAAO,IAAI,CAAA;AACb,CAAC,CAAA;AAED,kBAAe,SAAS,CAAA"}
