@@ -7,5 +7,5 @@ module.exports = {
   name: pack.name,
   rootDir: './',
   testPathIgnorePatterns: ['\\.(orig.js)$', '\\.(skip.js)$'],
-  setupTestFrameworkScriptFile: '<rootDir>../../jest.setup.js',
+  setupFilesAfterEnv: ['<rootDir>../../jest.setup.js'],
 }

@@ -14,17 +14,21 @@ describe('partridge-logging-index', () => {
   beforeEach(() => {
     mockStackDriver = new StackDriverModule.LoggingWinston()
     stackDriverTransportSpy = jest.fn(() => mockStackDriver)
-    jest.spyOn(StackDriverModule, 'LoggingWinston').mockImplementation(stackDriverTransportSpy)
-    winstonCreateLoggerSpy = jest.spyOn(winston, 'createLogger').mockImplementation(() => ({on: loggerOnMock}))
-    loggerSpy = jest.spyOn(LoggerModule, 'Logger').mockImplementation(() => ({clzMethod: '__LOGGER'}))
+    // jest.spyOn(StackDriverModule, 'LoggingWinston').mockImplementation(stackDriverTransportSpy)
+    jest.mock('@google-cloud/logging-winston', () => ({LoggingWinston: stackDriverTransportSpy}))
+    winstonCreateLoggerSpy = jest.spyOn(winston, 'createLogger').mockImplementation(() => ({on: jest.fn()} as unknown as winston.Logger))
+    // loggerSpy = jest.spyOn(LoggerModule, 'Logger').mockImplementation(() => ({clzMethod: '__LOGGER'}))
+    // loggerSpy = jest.mock('../logger', () => ({Logger: () => ({clzMethod: '__LOGGER'})})) as unknown as jest.Mock<typeof LoggerModule.Logger>
+    loggerSpy = jest.mock('../logger') as unknown as jest.Mock<typeof LoggerModule.Logger>
   })
   afterEach(() => {
+    jest.clearAllMocks()
     jest.resetModules() // lifesaver
   })
 
   it('attaches stackDriver transport when config specifies and is on server', () => {
     const mockConfig: Partial<Config> = {
-      environment: {APP_ENV: 'server', IS_E2E_TEST: false, GCE_PROJECT_ID: 'partridge-alan', GCE_KEY_FILENAME: '/path/to/filename.json'},
+      environment: {APP_ENV: 'local', CLIENT_SERVER: 'server', IS_E2E_TEST: false, GCE_PROJECT_ID: 'partridge-alan', GCE_KEY_FILENAME: '/path/to/filename.json'},
       logging: {level: 'warn', stackDriverEnable: true, consoleEnable: false}
     }
     jest.doMock('partridge-config', () => ({config: mockConfig, isServerSide: () => true}))
@@ -38,7 +42,7 @@ describe('partridge-logging-index', () => {
   
   it('does not attach stackDriver transport when config specifies on but not on server', () => {
     const mockConfig: Partial<Config> = {
-      environment: {APP_ENV: 'server', IS_E2E_TEST: false, GCE_PROJECT_ID: 'partridge-alan'},
+      environment: {APP_ENV: 'local', CLIENT_SERVER: 'server', IS_E2E_TEST: false, GCE_PROJECT_ID: 'partridge-alan'},
       logging: {level: 'warn', stackDriverEnable: false, consoleEnable: false}
     }
     jest.doMock('partridge-config', () => ({config: mockConfig, isServerSide: () => false}))
@@ -49,7 +53,7 @@ describe('partridge-logging-index', () => {
   
   it('does not attach stackDriver transport when config specifies off', () => {
     const mockConfig: Partial<Config> = {
-      environment: {APP_ENV: 'server', IS_E2E_TEST: false, GCE_PROJECT_ID: 'partridge-alan'},
+      environment: {APP_ENV: 'local', CLIENT_SERVER: 'server', IS_E2E_TEST: false, GCE_PROJECT_ID: 'partridge-alan'},
       logging: {level: 'warn', stackDriverEnable: false, consoleEnable: false}
     }
     jest.doMock('partridge-config', () => ({config: mockConfig, isServerSide: () => true}))
@@ -60,7 +64,7 @@ describe('partridge-logging-index', () => {
   
   it('Creates Logger instance', () => {
     const mockConfig: Partial<Config> = {
-      environment: {APP_ENV: 'server', IS_E2E_TEST: false, GCE_PROJECT_ID: 'partridge-alan'},
+      environment: {APP_ENV: 'local', CLIENT_SERVER: 'server', IS_E2E_TEST: false, GCE_PROJECT_ID: 'partridge-alan'},
       logging: {level: 'warn', stackDriverEnable: false, consoleEnable: false}
     }
     jest.doMock('partridge-config', () => ({config: mockConfig, isServerSide: () => true}))
