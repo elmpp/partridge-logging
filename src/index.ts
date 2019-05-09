@@ -53,7 +53,8 @@ const myFormatWithDumpables = printf((info: TransformableInfo) => {
 const transports = new Map()
 
 // use this simplistic check as webpack can analyze this. See DefinePlugin of `next.config.js`
-if (process.env.APP_ENV !== 'browser') {
+// if (process.env.CLIENT_SERVER !== 'client') {
+if (config.environment.CLIENT_SERVER !== 'client' && config.logging.stackDriverEnable) {
   const {LoggingWinston} = require('@google-cloud/logging-winston') // https://goo.gl/so8Afv
 
   const loggingWinstonIns = new LoggingWinston({
