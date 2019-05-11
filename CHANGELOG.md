@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.58.0](https://github.com/elmpp/partridge/compare/v0.57.0...v0.58.0) (2019-05-11)
+
+
+### Features
+
+* sky ([bfbffa3](https://github.com/elmpp/partridge/commit/bfbffa3))
+
+
+
+
+
 # [0.57.0](https://github.com/elmpp/partridge/compare/v0.55.0...v0.57.0) (2019-05-03)
 
 **Note:** Version bump only for package partridge-logging
