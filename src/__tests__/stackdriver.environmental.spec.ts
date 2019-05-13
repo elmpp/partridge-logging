@@ -1,8 +1,8 @@
 /**
  * Writes some log entries to stackdriver (via fluentd)
  *
- * Note that in test:functional, the server is brought up for us in the global jest-puppeteer hook via jest-dev-server
- * @see /jest-functional.config and /jest-puppeteer.config.js
+ * Note that in test:environmental, the server is brought up for us in the global jest-puppeteer hook via jest-dev-server
+ * @see /jest-environmental.config and /jest-puppeteer.config.js
  */
 import {config} from 'partridge-config'
 
