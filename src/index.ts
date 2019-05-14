@@ -74,9 +74,16 @@ if (process.env.CLIENT_SERVER !== 'client' // @see DefinePlugin of `next.config.
 if (config.logging.consoleEnable) {
   // @TODO - remove myFormatWithDumpables once released
   transports.set('console', new winstonTransports.Console({format: myFormatWithDumpables}))
+  
+  debug(`Logging: ${JSON.stringify({transports: [...transports.keys()], level: config.logging.level})}`)
+}
+else {
+  debug(`Logging: ${JSON.stringify({transports: [...transports.keys()], level: config.logging.level})}`)
+  
+  // include the console transport always as winston needs at least one
+  transports.set('console', new winstonTransports.Console({format: myFormatWithDumpables, silent: true}))
 }
 
-debug(`Logging: ${JSON.stringify({transports: [...transports.keys()], level: config.logging.level})}`)
 
 const logProvider = createLogger({
   format: combine(

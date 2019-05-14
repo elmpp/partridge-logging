@@ -47,6 +47,10 @@ export class Logger {
     return this
   }
 
+  end() {
+    this.logProvider.end() // http://tinyurl.com/yyo9v7p8
+  }
+
   optionsReducer(options: LogOptions, logLevel: LogLevel): LogOptions {
     if (options.dumpables && Object.keys(options.dumpables).length !== 0) {
       options = {

@@ -15,6 +15,7 @@ jest.mock('../logger', () => ({
 jest.mock('@google-cloud/logging-winston', () => ({
   LoggingWinston: jest.fn().mockImplementation(() => mockStackDriverInstance)
 }))
+jest.mock('org-common/lib/util')
 
 
 describe('partridge-logging-index', () => {
@@ -54,7 +55,7 @@ describe('partridge-logging-index', () => {
   it('does not attach stackDriver transport when config specifies off', () => {
     const mockConfig: Partial<Config> = {
       environment: {CLIENT_SERVER: 'server', GCE_PROJECT_ID: 'partridge-alan'},
-      logging: {level: 'warn', stackDriverEnable: false, consoleEnable: false}
+      logging: {level: 'warn', stackDriverEnable: false, consoleEnable: true}
     }
     jest.doMock('partridge-config', () => ({config: mockConfig}))
     require('../index')

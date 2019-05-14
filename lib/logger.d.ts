@@ -6,6 +6,7 @@ export declare class Logger {
     log(logLevel: LogLevel, message: string, options?: LogOptions): this;
     log(message: string, options?: LogOptions): this;
     log(logLevel: string, message: string): this;
+    end(): void;
     optionsReducer(options: LogOptions, logLevel: LogLevel): LogOptions;
 }
 //# sourceMappingURL=logger.d.ts.map
