@@ -86,7 +86,7 @@ if (
   }
 
   const {LoggingWinston} = require('@google-cloud/logging-winston') // http://tinyurl.com/y383a99v
-  const cloudWinstonOptions: CloudWinstonOptions = {
+  const cloudWinstonOptions: CloudWinstonOptions & {handleExceptions?: boolean} = {
     // Cloud Winston NodeJS logging transport configuration - http://tinyurl.com/y2g2xfdp
     projectId: config.environment.GCE_PROJECT_ID,
     keyFilename: config.environment.GCE_KEY_FILENAME, // service account deets - http://tinyurl.com/y364vhft
@@ -95,6 +95,7 @@ if (
       version: process.env.APP_VERSION,
     },
     logName: process.env.APP_NAME,
+    handleExceptions: true,
   }
 
   const loggingWinstonIns = new LoggingWinston(cloudWinstonOptions)

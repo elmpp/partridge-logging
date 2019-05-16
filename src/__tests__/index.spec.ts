@@ -47,15 +47,27 @@ describe('partridge-logging-index', () => {
     require('../index')
 
     expect(mockStackDriver).toHaveBeenCalledTimes(1)
+    
+    // serviceAccount cert required for use outside GCP
     expect(mockStackDriver.mock.calls[0][0]).toEqual(
       expect.objectContaining({projectId: 'partridge-alan', keyFilename: '/path/to/filename.json'})
-    ) // https://goo.gl/GLPD4j
-    expect(mockStackDriver.mock.calls[0][0]).toEqual(
-      expect.objectContaining({serviceContext: {service: 'partridge-frontend', version: '0.21'}})
-    ) // Stackdriver Error reporting - http://tinyurl.com/y58fxxtg
+    ) 
+    
+    // pass along the APP_NAME to allow discrimination in Stackdriver Console etc
     expect(mockStackDriver.mock.calls[0][0]).toEqual(
       expect.objectContaining({logName: 'partridge-frontend'})
     )
+
+    // required to show in Stackdriver Error Reporting - https://goo.gl/GLPD4j
+    expect(mockStackDriver.mock.calls[0][0]).toEqual(
+      expect.objectContaining({serviceContext: {service: 'partridge-frontend', version: '0.21'}})
+    ) 
+
+    // unhandled exceptions - http://tinyurl.com/y6mrghtk
+    expect(mockStackDriver.mock.calls[0][0]).toEqual(
+      expect.objectContaining({handleExceptions: true})
+    )
+
     expect(mockCreateLogger.mock.calls[0][0]!.transports).toContain(mockStackDriverInstance)
   })
 

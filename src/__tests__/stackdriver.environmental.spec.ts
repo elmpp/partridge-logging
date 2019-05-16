@@ -38,7 +38,7 @@ describe('Stackdriver logging', () => {
 
     console.info("CHECK THE GKE LOGS OUTPUT (select 'Global') - https://goo.gl/jrpvzt")
   })
-
+  
   it('should log a httpRequest like the logging middleware', () => {
     logger.log('info', '/stackdriver.environment.spec.ts endpoint hit', {
       httpRequest: {
@@ -73,12 +73,7 @@ describe('Stackdriver logging', () => {
   
   // Error reporting configuration - http://tinyurl.com/yxo9wcaz
   it('should be configured so error logs are picked up by StackDriver Error Reporting', () => {
-
-    const structuredObject = {
-      key: 'value',
-      another_key: 'another_value',
-    }
-
+    
     try {
       throw new Error("Test Error")
     }
@@ -87,9 +82,5 @@ describe('Stackdriver logging', () => {
     }
 
     console.info("CHECK THE ERROR REPORTING CONSOLE - http://tinyurl.com/y6sjh8ut")
-  })
-
-  it('should be configured to log unhandled errors', () => {
-    // http://tinyurl.com/hk99q8u
   })
 })
