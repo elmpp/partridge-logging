@@ -6,16 +6,17 @@
 export {default as DumpableError} from './dumpable-error'
 import {createLogger, format, transports as winstonTransports} from 'winston'
 import {config} from 'partridge-config'
-const {combine, timestamp, label, printf} = format
 import debugFun, {IDebugger} from 'debug'
 import {Logger} from './logger'
 import {TransformableInfo} from 'logform'
 import util from 'util'
-import { LogOptions } from "./__types__"
+import {LogOptions} from './__types__'
 import chalk from 'chalk'
+import {Options as CloudWinstonOptions} from '@google-cloud/logging-winston/build/src/types/core'
 
 export * from './__types__'
 
+const {combine, timestamp, label, printf} = format
 const debug: IDebugger = debugFun('logging:setup')
 debug.log = console.log.bind(console) // https://goo.gl/KMfmSi
 
@@ -23,49 +24,82 @@ const runtimeLabel = (label: LogOptions['runtime_label']) => {
   switch (label) {
     case 'APOLLO':
       return chalk.green(`[${label}]`)
-      case 'AXIOS':
+    case 'AXIOS':
       return chalk.yellow(`[${label}]`)
-      case 'BOOTSTRAP':
+    case 'BOOTSTRAP':
       return chalk.blue(`[${label}]`)
-      case 'EXPRESS':
+    case 'EXPRESS':
       return chalk.magenta(`[${label}]`)
-      case 'FRONTEND':
+    case 'FRONTEND':
       return chalk.cyan(`[${label}]`)
-      case 'IMPORTER':
+    case 'IMPORTER':
       return chalk.red(`[${label}]`)
-      case 'TYPEORM':
+    case 'TYPEORM':
       return chalk.blueBright(`[${label}]`)
   }
   return `[${label}]`
 }
 
-const myFormat = printf((info: TransformableInfo) => { // this can be taken as a `LogOptions` 
-  return `${info.timestamp} ${info.runtime_label ? runtimeLabel(info.runtime_label) : ''} ${info.level}: ${info.message}`
-})
+const myFormat = format.combine(
+  label({
+    // label: 'DEFAULT LABEL',
+    message: false,
+  }),
+  timestamp(),
+  format.errors({stack: true}), // http://tinyurl.com/y5qwqb9s
+  printf((info: TransformableInfo) => {
+    // this can be taken as a `LogOptions`
+    let formatted = `${info.timestamp} ${info.runtime_label ? runtimeLabel(info.runtime_label) : ''} ${info.level}: ${info.message}`
+    if (info.stack) {
+      formatted += `\n${info.stack}`
+    }
+    return formatted
+  })
+)
 
-const myFormatWithDumpables = printf((info: TransformableInfo) => {
-  if (info.dumpables) {
-    return `${info.timestamp} ${info.runtime_label ? runtimeLabel(info.runtime_label) : ''} ${info.level}: ${info.message} dumpables: ${util.inspect(info.dumpables || {}, {showHidden: false, depth: null})}` // tslint:disable-line
-  }
-  return `${info.timestamp} ${info.runtime_label ? runtimeLabel(info.runtime_label) : ''} ${info.level}: ${info.message}`
-})
+const myFormatWithDumpables = format.combine(
+  format.errors({stack: true}), // http://tinyurl.com/y5qwqb9s
+  printf((info: TransformableInfo) => {
+    let formatted = `${info.timestamp} ${info.runtime_label ? runtimeLabel(info.runtime_label) : ''} ${info.level}: ${
+      info.message
+    }\n${info.stack}`
+
+    if (info.stack) {
+      formatted += `\n${info.stack}`
+    }
+    if (info.dumpables) {
+      formatted += `\n dumpables: ${util.inspect(info.dumpables || {})}`
+    }
+    return formatted
+  })
+)
 
 const transports = new Map()
 
 // use this simplistic check as webpack can analyze this
-if (process.env.CLIENT_SERVER !== 'client' // @see DefinePlugin of `next.config.js`
-  && config.logging.stackDriverEnable
+if (
+  process.env.CLIENT_SERVER !== 'client' && // @see DefinePlugin of `next.config.js`
+  config.logging.stackDriverEnable
 ) {
-  const {LoggingWinston} = require('@google-cloud/logging-winston') // https://goo.gl/so8Afv
+  if (typeof process.env.APP_NAME === 'undefined' || typeof process.env.APP_VERSION === 'undefined') {
+    throw new Error('APP_NAME and APP_VERSION must be present in env vars')
+  }
 
-  const loggingWinstonIns = new LoggingWinston({
-    // options api - https://goo.gl/HBrj6a
+  const {LoggingWinston} = require('@google-cloud/logging-winston') // http://tinyurl.com/y383a99v
+  const cloudWinstonOptions: CloudWinstonOptions = {
+    // Cloud Winston NodeJS logging transport configuration - http://tinyurl.com/y2g2xfdp
     projectId: config.environment.GCE_PROJECT_ID,
-    keyFilename: config.environment.GCE_KEY_FILENAME,
+    keyFilename: config.environment.GCE_KEY_FILENAME, // service account deets - http://tinyurl.com/y364vhft
     serviceContext: {
-      service: '',
+      service: process.env.APP_NAME, // http://tinyurl.com/y58fxxtg
+      version: process.env.APP_VERSION,
     },
-  })
+    logName: process.env.APP_NAME,
+  }
+
+  const loggingWinstonIns = new LoggingWinston(cloudWinstonOptions)
+
+  debug(`StackDriver Options: ${JSON.stringify(cloudWinstonOptions)}`)
 
   // Logs will be written to: "projects/YOUR_PROJECT_ID/logs/winston_log" on GKE
   transports.set('stackDriver', loggingWinstonIns)
@@ -74,39 +108,27 @@ if (process.env.CLIENT_SERVER !== 'client' // @see DefinePlugin of `next.config.
 if (config.logging.consoleEnable) {
   // @TODO - remove myFormatWithDumpables once released
   transports.set('console', new winstonTransports.Console({format: myFormatWithDumpables}))
-  
+
   debug(`Logging: ${JSON.stringify({transports: [...transports.keys()], level: config.logging.level})}`)
-}
-else {
+} else {
   debug(`Logging: ${JSON.stringify({transports: [...transports.keys()], level: config.logging.level})}`)
-  
+
   // include the console transport always as winston needs at least one
   transports.set('console', new winstonTransports.Console({format: myFormatWithDumpables, silent: true}))
 }
 
-
 const logProvider = createLogger({
-  format: combine(
-    // https://goo.gl/mF7Y2d
-    label({
-      // label: 'DEFAULT LABEL',
-      message: false,
-    }),
-    timestamp(),
-    myFormat
-  ),
+  format: myFormat,
   level: config.logging.level,
   transports: [...transports.values()],
 })
 
-logProvider.on('error', (err: Error) => { 
+logProvider.on('error', (err: Error) => {
   logProvider.log('error', `Error during log provider call. Provider error msg: ${err.message}.`) // handles too-large grpc error
- })
+})
 
 const logger = new Logger(logProvider, config.logging.level as LogLevel)
 
 export default logger
 
-export {
-  Logger,
-}
+export {Logger}

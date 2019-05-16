@@ -23,25 +23,30 @@ export class Logger {
     let message: string
     let options: LogOptions
 
-    // level is not supplied
-    if (typeof messageOrOptions === 'object' && messageOrOptions !== null) {
-      message = logLevelOrMessage
-      options = messageOrOptions
-      // level and message supplied
-    } else if (typeof logLevelOrMessage === 'string' && typeof messageOrOptions === 'string') {
-      logLevel = logLevelOrMessage as LogLevel
-      message = messageOrOptions
-      options = optionsArg || {}
-    } else {
-      throw new DumpableError('Unrecognised log calls', {logLevelOrMessage, messageOrOptions, optionsArg})
-    }
-
     try {
+      
+      if (messageOrOptions instanceof Error) {
+        throw messageOrOptions    
+      }
+      // level is not supplied
+      else if (typeof messageOrOptions === 'object' && messageOrOptions !== null) {
+        message = logLevelOrMessage
+        options = messageOrOptions
+        // level and message supplied
+      } else if (typeof logLevelOrMessage === 'string' && typeof messageOrOptions === 'string') {
+        logLevel = logLevelOrMessage as LogLevel
+        message = messageOrOptions
+        options = optionsArg || {}
+      } else {
+        throw new DumpableError('Unrecognised log calls', {logLevelOrMessage, messageOrOptions, optionsArg})
+      }
+
       this.logProvider.log(logLevel, message, this.optionsReducer(options, logLevel))
     }
     catch (err) {
       // note that this error handling is actually done in the .on('error') handler in logger index.ts
-      this.logProvider.log('error', `Error during log provider call. Original msg: ${message}. Provider error msg: ${err.message}.`) // handles too-large grpc error
+      // this.logProvider.error(err) // handles too-large grpc error
+      this.logProvider.log('error', err) // handles too-large grpc error
     }
 
     return this
