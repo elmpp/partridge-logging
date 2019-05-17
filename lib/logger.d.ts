@@ -3,9 +3,7 @@ export declare class Logger {
     constructor(logProvider: LoggingProvider, defaultLogLevel: LogLevel);
     logProvider: LoggingProvider;
     defaultLogLevel: LogLevel;
-    log(logLevel: LogLevel, message: string, options?: LogOptions): this;
-    log(message: string, options?: LogOptions): this;
-    log(logLevel: string, message: string): this;
+    log(logLevelOrMessage: any, messageOrOptions?: any, optionsArg?: any): this;
     end(): void;
     optionsReducer(options: LogOptions, logLevel: LogLevel): LogOptions;
 }

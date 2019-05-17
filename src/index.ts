@@ -16,7 +16,7 @@ import {Options as CloudWinstonOptions} from '@google-cloud/logging-winston/buil
 
 export * from './__types__'
 
-const {combine, timestamp, label, printf} = format
+const {timestamp, label, printf} = format
 const debug: IDebugger = debugFun('logging:setup')
 debug.log = console.log.bind(console) // https://goo.gl/KMfmSi
 
@@ -40,39 +40,25 @@ const runtimeLabel = (label: LogOptions['runtime_label']) => {
   return `[${label}]`
 }
 
-const myFormat = format.combine(
-  label({
-    // label: 'DEFAULT LABEL',
-    message: false,
-  }),
+const myFormatWithDumpables = format.combine(
+  // label({
+  //   message: false,
+  // }),
   timestamp(),
   format.errors({stack: true}), // http://tinyurl.com/y5qwqb9s
   printf((info: TransformableInfo) => {
-    // this can be taken as a `LogOptions`
     let formatted = `${info.timestamp} ${info.runtime_label ? runtimeLabel(info.runtime_label) : ''} ${info.level}: ${info.message}`
-    if (info.stack) {
-      formatted += `\n${info.stack}`
-    }
-    return formatted
-  })
-)
-
-const myFormatWithDumpables = format.combine(
-  format.errors({stack: true}), // http://tinyurl.com/y5qwqb9s
-  printf((info: TransformableInfo) => {
-    let formatted = `${info.timestamp} ${info.runtime_label ? runtimeLabel(info.runtime_label) : ''} ${info.level}: ${
-      info.message
-    }\n${info.stack}`
 
     if (info.stack) {
       formatted += `\n${info.stack}`
     }
     if (info.dumpables) {
-      formatted += `\n dumpables: ${util.inspect(info.dumpables || {})}`
+      formatted += `\n dumpables: ${util.inspect(info.dumpables || {}, {showHidden: false, depth: null})}`
     }
     return formatted
   })
 )
+
 
 const transports = new Map()
 
@@ -107,26 +93,28 @@ if (
 }
 
 if (config.logging.consoleEnable) {
-  // @TODO - remove myFormatWithDumpables once released
-  transports.set('console', new winstonTransports.Console({format: myFormatWithDumpables}))
+  transports.set('console', new winstonTransports.Console({
+    handleExceptions: true,
+  }))
 
   debug(`Logging: ${JSON.stringify({transports: [...transports.keys()], level: config.logging.level})}`)
 } else {
   debug(`Logging: ${JSON.stringify({transports: [...transports.keys()], level: config.logging.level})}`)
 
   // include the console transport always as winston needs at least one
-  transports.set('console', new winstonTransports.Console({format: myFormatWithDumpables, silent: true}))
+  transports.set('console', new winstonTransports.Console({silent: true}))
 }
 
 const logProvider = createLogger({
-  format: myFormat,
   level: config.logging.level,
   transports: [...transports.values()],
+  format: myFormatWithDumpables, 
+  exitOnError: false,
 })
 
-logProvider.on('error', (err: Error) => {
-  logProvider.log('error', `Error during log provider call. Provider error msg: ${err.message}.`) // handles too-large grpc error
-})
+// logProvider.on('error', (err: Error) => {
+//   logProvider.log('error', `Error during log provider call. Provider error msg: ${err.message}.`) // handles too-large grpc error
+// })
 
 const logger = new Logger(logProvider, config.logging.level as LogLevel)
 

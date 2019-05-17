@@ -69,9 +69,11 @@ describe('partridge-logging-index', () => {
     )
 
     expect(mockCreateLogger.mock.calls[0][0]!.transports).toContain(mockStackDriverInstance)
+    expect(mockCreateLogger.mock.calls[0][0]).toHaveProperty('exitOnError', false)
+    expect(mockCreateLogger.mock.calls[0][0]).toHaveProperty('format')
   })
 
-  it('takes throws exception when env var APP_NAME not set', () => {
+  it('throws exception when env var APP_NAME/APP_VERSION not set', () => {
     expect(() => {
       mockConfig(true, true)
       delete process.env.APP_NAME

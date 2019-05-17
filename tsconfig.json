@@ -7,6 +7,6 @@
     "lib": ["es7"], // no need for DOM stuff etc as node app
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/__tests__/stackdriver.js"],
   "files": ["../typings/index.d.ts"],
 }

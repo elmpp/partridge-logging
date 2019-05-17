@@ -15,18 +15,20 @@ export class Logger {
   logProvider: LoggingProvider
   defaultLogLevel: LogLevel
 
-  log(logLevel: LogLevel, message: string, options?: LogOptions): this
-  log(message: string, options?: LogOptions): this
-  log(logLevel: string, message: string): this
+  // log(logLevel: LogLevel, message: string, options?: LogOptions): this
+  // log(message: string, options?: LogOptions): this
+  // log(logLevel: string, message: string): this
   log(logLevelOrMessage: any, messageOrOptions?: any, optionsArg?: any): this {
     let logLevel: LogLevel = this.defaultLogLevel
-    let message: string
+    let message: string | Error
     let options: LogOptions
 
     try {
       
       if (messageOrOptions instanceof Error) {
-        throw messageOrOptions    
+        logLevel = logLevelOrMessage
+        message = messageOrOptions
+        options = optionsArg || {}
       }
       // level is not supplied
       else if (typeof messageOrOptions === 'object' && messageOrOptions !== null) {
@@ -41,7 +43,7 @@ export class Logger {
         throw new DumpableError('Unrecognised log calls', {logLevelOrMessage, messageOrOptions, optionsArg})
       }
 
-      this.logProvider.log(logLevel, message, this.optionsReducer(options, logLevel))
+      this.logProvider.log(logLevel, message as string, this.optionsReducer(options, logLevel))
     }
     catch (err) {
       // note that this error handling is actually done in the .on('error') handler in logger index.ts
