@@ -52,7 +52,7 @@ const myFormatWithDumpables = format.combine(
     if (info.stack) {
       formatted += `\n${info.stack}`
     }
-    if (info.dumpables) {
+    if (info.dumpables && Object.values(info.dumpables).length) {
       formatted += `\n dumpables: ${util.inspect(info.dumpables || {}, {showHidden: false, depth: null})}`
     }
     return formatted

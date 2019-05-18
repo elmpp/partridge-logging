@@ -3,7 +3,7 @@ import winston from 'winston';
 export interface Dumpables {
     axiosRequest?: AxiosRequestConfig[];
     axiosResponse?: AxiosResponse[];
-    [index: string]: any;
+    [index: string]: any[] | undefined;
 }
 export declare type Dumpable = AxiosRequestConfig | AxiosResponse | AxiosError | Formattable;
 export declare type DumpableKey = 'axiosRequest' | 'axiosResponse' | 'axiosError' | string;
