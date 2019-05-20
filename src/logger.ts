@@ -24,7 +24,6 @@ export class Logger {
     let options: LogOptions
 
     try {
-      
       if (messageOrOptions instanceof Error) {
         logLevel = logLevelOrMessage
         message = messageOrOptions

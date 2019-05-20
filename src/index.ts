@@ -36,6 +36,8 @@ const runtimeLabel = (label: LogOptions['runtime_label']) => {
       return chalk.red(`[${label}]`)
     case 'TYPEORM':
       return chalk.blueBright(`[${label}]`)
+    case 'GRAPHQL':
+      return chalk.redBright(`[${label}]`)
   }
   return `[${label}]`
 }
