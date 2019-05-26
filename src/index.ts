@@ -15,6 +15,7 @@ import chalk from 'chalk'
 import {Options as CloudWinstonOptions} from '@google-cloud/logging-winston/build/src/types/core'
 
 export * from './__types__'
+import {apply, middleware} from './logging-middleware'
 
 const {timestamp, label, printf} = format
 const debug: IDebugger = debugFun('logging:setup')
@@ -122,4 +123,8 @@ const logger = new Logger(logProvider, config.logging.level as LogLevel)
 
 export default logger
 
-export {Logger}
+export {
+  Logger,
+  apply,
+  middleware,
+}
