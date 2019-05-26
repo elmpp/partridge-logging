@@ -1,4 +1,4 @@
-import {LoggingProvider, Dumpable, DumpableKey, LogOptions} from './__types__'
+import {LoggingProvider, Dumpable, DumpableKey, Dumpables, LogOptions} from './__types__'
 import format from './format'
 import DumpableError from './dumpable-error'
 import mapValues from 'lodash.mapvalues'
@@ -18,14 +18,14 @@ export class Logger {
   // log(logLevel: LogLevel, message: string, options?: LogOptions): this
   // log(message: string, options?: LogOptions): this
   // log(logLevel: string, message: string): this
-  log(logLevelOrMessage: any, messageOrOptions?: any, optionsArg?: any): this {
+  log(logLevelOrMessage: string, messageOrOptions?: Error | string, optionsArg?: LogOptions): this {
     let logLevel: LogLevel = this.defaultLogLevel
     let message: string | Error
     let options: LogOptions
 
     try {
       if (messageOrOptions instanceof Error) {
-        logLevel = logLevelOrMessage
+        logLevel = logLevelOrMessage as LogLevel
         message = messageOrOptions
         options = optionsArg || {}
       }
@@ -39,7 +39,7 @@ export class Logger {
         message = messageOrOptions
         options = optionsArg || {}
       } else {
-        throw new DumpableError('Unrecognised log calls', {logLevelOrMessage, messageOrOptions, optionsArg})
+        throw new DumpableError('Unrecognised log calls', {logLevelOrMessage: [logLevelOrMessage], messageOrOptions: [messageOrOptions], options: [optionsArg]})
       }
 
       this.logProvider.log(logLevel, message as string, this.optionsReducer(options, logLevel))

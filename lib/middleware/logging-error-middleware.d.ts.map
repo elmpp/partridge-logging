@@ -1,0 +1,1 @@
+{"version":3,"file":"logging-error-middleware.d.ts","sourceRoot":"","sources":["../../src/middleware/logging-error-middleware.ts"],"names":[],"mappings":"AAGA,OAAO,OAAO,MAAM,SAAS,CAAA;AAK7B,QAAA,MAAM,OAAO,+FAsBZ,CAAA;AAED,QAAA,MAAM,eAAe;;UAEpB,CAAA;AAED,OAAO,EACL,eAAe,IAAI,KAAK,EACxB,OAAO,IAAI,UAAU,GACtB,CAAA"}
