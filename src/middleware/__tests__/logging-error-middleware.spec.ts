@@ -1,11 +1,11 @@
 import express from 'express'
 import nodeMocks from 'node-mocks-http' // https://goo.gl/BsbPp7
-import {apply as applyLoggingMiddlware, middleware as loggingMiddleware} from '../logging-middleware'
-const {log: mockedLogger} = jest.requireMock('../')
+import {apply as applyLoggingMiddlware, middleware as loggingMiddleware} from '../logging-error-middleware'
+const {log: mockedLogger} = jest.requireMock('../../')
 
-jest.mock('../', () => ({log: jest.fn()}))
+jest.mock('../../', () => ({log: jest.fn()}))
 
-describe('logging-middleware', () => {
+describe('logging-error-middleware', () => {
 
   const expressApp = {
     use: jest.fn(),
@@ -46,14 +46,16 @@ describe('logging-middleware', () => {
       cacheHit: reqMock.headers["X-Cache"],
     }
 
-    loggingMiddleware(reqMock, resMock, nextMock)
+    const err = new Error('something went wrong')
+
+    loggingMiddleware(err, reqMock, resMock, nextMock)
 
     expect(mockedLogger).toHaveBeenCalled()
-    expect(mockedLogger.mock.calls[0][0]).toEqual('info')
-    expect(mockedLogger.mock.calls[0][1]).toEqual(`${reqMock.url} endpoint hit`)
+    expect(mockedLogger.mock.calls[0][0]).toEqual('error')
+    expect(mockedLogger.mock.calls[0][1]).toEqual(err)
     expect(mockedLogger.mock.calls[0][2].httpRequest).toEqual(expect.objectContaining(expectedHttpRequest))
     expect(mockedLogger.mock.calls[0][2].dumpables).toEqual(expect.objectContaining({httpRequest: [expectedHttpRequest]}))
-    
-    expect(nextMock).toHaveBeenCalled()
+
+    expect(nextMock).toHaveBeenLastCalledWith(err)
   })
 })
