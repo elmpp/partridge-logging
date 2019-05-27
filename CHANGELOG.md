@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.62.0](https://github.com/elmpp/partridge/compare/v0.60.0...v0.62.0) (2019-05-27)
+
+**Note:** Version bump only for package partridge-logging
+
+
+
+
+
 # [0.61.0](https://github.com/elmpp/partridge/compare/v0.60.0...v0.61.0) (2019-05-27)
 
 **Note:** Version bump only for package partridge-logging
