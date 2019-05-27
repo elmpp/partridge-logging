@@ -30,7 +30,7 @@
     "debug": "^4.1.1",
     "lodash.mapvalues": "^4.6.0",
     "lodash.pick": "^4.4.0",
-    "org-common": "^0.63.0",
+    "org-common": "github:elmpp/org-common#^0.63.0",
     "partridge-config": "github:elmpp/partridge-config#v0.63.0",
     "winston": "^3.1.0"
   },
