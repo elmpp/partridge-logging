@@ -10,7 +10,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/elmpp/partridge.git"
+    "url": "git+https://github.com/elmpp/partridge-logging.git"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
