@@ -23,7 +23,7 @@ import { TransformableInfo } from 'logform';
 describe('Stackdriver logging', () => {
 
   beforeAll(() => {
-    process.env.GOOGLE_APPLICATION_CREDENTIALS = config.environment.GCE_KEY_FILENAME
+    process.env.GOOGLE_APPLICATION_CREDENTIALS = config.environment.GCP_SERVICEACCOUNT_LOGGING
   })
   afterAll((done) => {
     logger.logProvider.on('finish', (_info: TransformableInfo) => {
@@ -34,7 +34,7 @@ describe('Stackdriver logging', () => {
   
   it('should log a standard log entry', () => {
 
-    logger.log('info', 'Test Message', {runtime_label: 'IMPORTER', label: 'TEST LABEL'})
+    logger.log('info', 'Test Message', {runtime_label: 'IMPORTER'})
 
     console.info("CHECK THE GKE LOGS OUTPUT (select 'Global') - https://goo.gl/jrpvzt")
   })
@@ -75,7 +75,7 @@ describe('Stackdriver logging', () => {
   it('should be configured so error logs are picked up by StackDriver Error Reporting', () => {
     
     try {
-      throw new Error("Test Error")
+      throw new Error("Test Error with stack trace")
     }
     catch (e) {
       logger.log('error', e)

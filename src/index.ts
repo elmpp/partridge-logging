@@ -76,8 +76,8 @@ if (
   const {LoggingWinston} = require('@google-cloud/logging-winston') // http://tinyurl.com/y383a99v
   const cloudWinstonOptions: CloudWinstonOptions & {handleExceptions?: boolean} = {
     // Cloud Winston NodeJS logging transport configuration - http://tinyurl.com/y2g2xfdp
-    projectId: config.environment.GCE_PROJECT_ID,
-    keyFilename: config.environment.GCE_KEY_FILENAME, // service account deets - http://tinyurl.com/y364vhft
+    projectId: config.environment.GCP_PROJECT_ID,
+    keyFilename: '/tmp/serviceaccount-partridge-logging.json', // service account deets - http://tinyurl.com/y364vhft
     serviceContext: {
       service: process.env.APP_NAME, // http://tinyurl.com/y58fxxtg
       version: process.env.APP_VERSION,

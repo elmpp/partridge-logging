@@ -22,8 +22,8 @@ describe('partridge-logging-index', () => {
     const mockConfig: Partial<Config> = {
       environment: {
         CLIENT_SERVER: 'server',
-        GCE_PROJECT_ID: 'partridge-alan',
-        GCE_KEY_FILENAME: '/path/to/filename.json',
+        GCP_PROJECT_ID: 'partridge-alan',
+        GCP_SERVICEACCOUNT_LOGGING: '/path/to/filename.json',
       },
       logging: {level: 'warn', stackDriverEnable, consoleEnable},
     }
