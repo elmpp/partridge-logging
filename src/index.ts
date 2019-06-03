@@ -5,6 +5,7 @@
 
 export {default as DumpableError} from './dumpable-error'
 import {createLogger, format, transports as winstonTransports} from 'winston'
+import { LEVEL, MESSAGE } from 'triple-beam'
 import {config} from 'partridge-config'
 import debugFun, {IDebugger} from 'debug'
 import {Logger} from './logger'
@@ -47,9 +48,41 @@ const myFormatWithDumpables = format.combine(
   //   message: false,
   // }),
   timestamp(),
-  format.errors({stack: true}), // http://tinyurl.com/y5qwqb9s
+  format((info: TransformableInfo) => { // http://tinyurl.com/y5qwqb9s / inspired by https://tinyurl.com/yylgtvzl
+    if (info instanceof Error) {
+      const newinfo = Object.assign({}, info, {
+        level: info.level,
+        [LEVEL]: info[LEVEL] || info.level,
+        message: info.message,
+        [MESSAGE]: info[MESSAGE] || info.message
+      }) // tslint:disable-line
+
+      newinfo.stack = info.stack
+      return newinfo
+    }
+
+    if (!((info as any).message instanceof Error)) return info
+
+    // Assign all enumerable properties and the
+    // message property from the error provided.
+    Object.assign(info, info.message)
+
+    const err = (info.message as unknown) as Error
+    if (typeof err.message !== 'undefined') {
+      info.message = err.message
+      info[MESSAGE] = err.message;
+    }
+
+    // Assign the stack if requested.
+    if (typeof err.stack !== 'undefined') {
+      info.stack = err.stack
+    }
+    return info
+  })(), // https://tinyurl.com/y2b4wf72
   printf((info: TransformableInfo) => {
-    let formatted = `${info.timestamp} ${info.runtime_label ? runtimeLabel(info.runtime_label) : ''} ${info.level}: ${info.message}`
+    let formatted = `${info.timestamp} ${info.runtime_label ? runtimeLabel(info.runtime_label) : ''} ${info.level}: ${
+      info.message
+    }`
 
     if (info.stack) {
       formatted += `\n${info.stack}`
@@ -60,7 +93,6 @@ const myFormatWithDumpables = format.combine(
     return formatted
   })
 )
-
 
 const transports = new Map()
 
@@ -95,9 +127,12 @@ if (
 }
 
 if (config.logging.consoleEnable) {
-  transports.set('console', new winstonTransports.Console({
-    handleExceptions: true,
-  }))
+  transports.set(
+    'console',
+    new winstonTransports.Console({
+      handleExceptions: true,
+    })
+  )
 
   debug(`Logging: ${JSON.stringify({transports: [...transports.keys()], level: config.logging.level})}`)
 } else {
@@ -110,7 +145,7 @@ if (config.logging.consoleEnable) {
 const logProvider = createLogger({
   level: config.logging.level,
   transports: [...transports.values()],
-  format: myFormatWithDumpables, 
+  format: myFormatWithDumpables,
   exitOnError: false,
 })
 
@@ -122,6 +157,4 @@ const logger = new Logger(logProvider, config.logging.level as LogLevel)
 
 export default logger
 
-export {
-  Logger,
-}
+export {Logger}

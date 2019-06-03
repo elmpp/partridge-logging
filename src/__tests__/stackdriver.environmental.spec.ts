@@ -78,8 +78,9 @@ describe('Stackdriver logging', () => {
       throw new Error("Test Error with stack trace")
     }
     catch (e) {
-      logger.log('error', e)
+      logger.log('error', e, {runtime_label: 'IMPORTER', dumpables: {something: [{else: 'here'}]}})
     }
+    logger.log('error', new Error('Test Error without stack trace'), {runtime_label: 'IMPORTER', dumpables: {something: [{else: 'here'}]}})
 
     console.info("CHECK THE ERROR REPORTING CONSOLE - http://tinyurl.com/y6sjh8ut")
   })

@@ -60,4 +60,13 @@ describe('logger', () => {
       new Error(grpcErrorMsg),
     )
   })
+
+  it('allows logging of Error objects', () => {
+    const dumpables: Dumpables = {axiosRequest: [axiosRequestMock]}
+    const logOptions: LogOptions = {runtime_label: 'AXIOS', dumpables}
+    const testError = new Error('non-enumerable Error object needs printing')
+    logger.log('error', testError, logOptions)
+
+    expect(winstonLoggerMock.log.mock.calls[0][1]).toEqual(testError)
+  })
 })
