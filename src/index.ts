@@ -99,7 +99,7 @@ const transports = new Map()
 // use this simplistic check as webpack can analyze this
 if (
   process.env.CLIENT_SERVER !== 'client' && // @see DefinePlugin of `next.config.js`
-  config.logging.stackDriverEnable
+  config.logging.LOGGING_STACKDRIVER_ENABLE
 ) {
   if (typeof process.env.APP_NAME === 'undefined' || typeof process.env.APP_VERSION === 'undefined') {
     throw new Error('APP_NAME and APP_VERSION must be present in env vars')
@@ -109,7 +109,7 @@ if (
   const cloudWinstonOptions: CloudWinstonOptions & {handleExceptions?: boolean} = {
     // Cloud Winston NodeJS logging transport configuration - http://tinyurl.com/y2g2xfdp
     projectId: config.environment.GCP_PROJECT_ID,
-    keyFilename: '/tmp/serviceaccount-partridge-logging.json', // service account deets - http://tinyurl.com/y364vhft
+    keyFilename: config.environment.GCP_SERVICEACCOUNT_LOGGING, // service account deets - http://tinyurl.com/y364vhft
     serviceContext: {
       service: process.env.APP_NAME, // http://tinyurl.com/y58fxxtg
       version: process.env.APP_VERSION,
@@ -126,7 +126,7 @@ if (
   transports.set('stackDriver', loggingWinstonIns)
 }
 
-if (config.logging.consoleEnable) {
+if (config.logging.LOGGING_CONSOLE_ENABLE) {
   transports.set(
     'console',
     new winstonTransports.Console({
@@ -134,16 +134,16 @@ if (config.logging.consoleEnable) {
     })
   )
 
-  debug(`Logging: ${JSON.stringify({transports: [...transports.keys()], level: config.logging.level})}`)
+  debug(`Logging: ${JSON.stringify({transports: [...transports.keys()], level: config.logging.LOGGING_LEVEL})}`)
 } else {
-  debug(`Logging: ${JSON.stringify({transports: [...transports.keys()], level: config.logging.level})}`)
+  debug(`Logging: ${JSON.stringify({transports: [...transports.keys()], level: config.logging.LOGGING_LEVEL})}`)
 
   // include the console transport always as winston needs at least one
   transports.set('console', new winstonTransports.Console({silent: true}))
 }
 
 const logProvider = createLogger({
-  level: config.logging.level,
+  level: config.logging.LOGGING_LEVEL,
   transports: [...transports.values()],
   format: myFormatWithDumpables,
   exitOnError: false,
@@ -153,7 +153,7 @@ const logProvider = createLogger({
 //   logProvider.log('error', `Error during log provider call. Provider error msg: ${err.message}.`) // handles too-large grpc error
 // })
 
-const logger = new Logger(logProvider, config.logging.level as LogLevel)
+const logger = new Logger(logProvider, config.logging.LOGGING_LEVEL as LogLevel)
 
 export default logger
 

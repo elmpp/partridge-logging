@@ -8,13 +8,13 @@
  * Note that in test:environmental, the server is brought up for us in the global jest-puppeteer hook via jest-dev-server
  * @see /jest-environmental.config and /jest-puppeteer.config.js
  */
-import {config} from 'partridge-config'
+import {config, Config} from 'partridge-config'
 
 jest.doMock('partridge-config', () => ({config: {...config, logging: {
-  stackDriverEnable: true,
-  consoleEnable: true,
-  level: 'info',
-}}}))
+  LOGGING_STACKDRIVER_ENABLE: true,
+  LOGGING_CONSOLE_ENABLE: true,
+  LOGGING_LEVEL: 'info',
+} as Partial<Config['logging']>}}))
 
 import logger from 'partridge-logging'
 import { TransformableInfo } from 'logform';

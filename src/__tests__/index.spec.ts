@@ -18,14 +18,14 @@ jest.mock('@google-cloud/logging-winston', () => ({
 jest.mock('org-common/lib/util')
 
 describe('partridge-logging-index', () => {
-  const mockConfig = (stackDriverEnable: boolean = true, consoleEnable: boolean = true) => {
+  const mockConfig = (LOGGING_STACKDRIVER_ENABLE: boolean = true, LOGGING_CONSOLE_ENABLE: boolean = true) => {
     const mockConfig: Partial<Config> = {
       environment: {
         CLIENT_SERVER: 'server',
         GCP_PROJECT_ID: 'partridge-alan',
         GCP_SERVICEACCOUNT_LOGGING: '/path/to/filename.json',
       },
-      logging: {level: 'warn', stackDriverEnable, consoleEnable},
+      logging: {LOGGING_LEVEL: 'warn', LOGGING_STACKDRIVER_ENABLE, LOGGING_CONSOLE_ENABLE},
     }
     jest.doMock('partridge-config', () => ({config: mockConfig}))
   }
@@ -105,7 +105,7 @@ describe('partridge-logging-index', () => {
   })
 
   // it("attaches console transport when config specifies on", () => {
-  //   const mockConfig: Partial<Config> = {logging: {level: 'warn', stackDriverEnable: true, consoleEnable: true}}
+  //   const mockConfig: Partial<Config> = {logging: {level: 'warn', LOGGING_STACKDRIVER_ENABLE: true, LOGGING_CONSOLE_ENABLE: true}}
   //   jest.doMock("partridge-config", () => ({config: mockConfig}))
   //   require("../index")
 
