@@ -17,12 +17,6 @@ const logging = (req: express.Request, res: express.Response, next: express.Next
     referer: req.headers.referer,
     cacheHit: req.headers["X-Cache"],
   }, Boolean)
-
-  if (process.env.NODE_ENV === 'development') {
-    if (httpRequest.requestUrl!.match(/_next\/on-demand-entries-ping/)) {
-      return next()
-    }
-  }
   
   // please note there is an exclusion applied with StackDriver for /_next/xxx - http://tinyurl.com/y63csq3r
   logger.log('info', `${req.url} endpoint hit`, {

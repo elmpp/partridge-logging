@@ -153,7 +153,7 @@ const logProvider = createLogger({
 //   logProvider.log('error', `Error during log provider call. Provider error msg: ${err.message}.`) // handles too-large grpc error
 // })
 
-const logger = new Logger(logProvider, config.logging.LOGGING_LEVEL as LogLevel)
+const logger = new Logger(logProvider, config.logging.LOGGING_LEVEL)
 
 export default logger
 
