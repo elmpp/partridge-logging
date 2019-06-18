@@ -14,10 +14,11 @@ import util from 'util'
 import {LogOptions} from './__types__'
 import chalk from 'chalk'
 import {Options as CloudWinstonOptions} from '@google-cloud/logging-winston/build/src/types/core'
+import {truthy} from 'org-common/lib/type-util'
 
 export * from './__types__'
 
-const {timestamp, label, printf} = format
+const {timestamp, printf} = format
 const debug: IDebugger = debugFun('logging:setup')
 debug.log = console.log.bind(console) // https://goo.gl/KMfmSi
 
@@ -99,7 +100,7 @@ const transports = new Map()
 // use this simplistic check as webpack can analyze this
 if (
   process.env.CLIENT_SERVER !== 'client' && // @see DefinePlugin of `next.config.js`
-  config.logging.LOGGING_STACKDRIVER_ENABLE
+  truthy(config.logging.LOGGING_STACKDRIVER_ENABLE)
 ) {
   if (typeof process.env.APP_NAME === 'undefined' || typeof process.env.APP_VERSION === 'undefined') {
     throw new Error('APP_NAME and APP_VERSION must be present in env vars')
@@ -126,7 +127,7 @@ if (
   transports.set('stackDriver', loggingWinstonIns)
 }
 
-if (config.logging.LOGGING_CONSOLE_ENABLE) {
+if (truthy(config.logging.LOGGING_CONSOLE_ENABLE)) {
   transports.set(
     'console',
     new winstonTransports.Console({
